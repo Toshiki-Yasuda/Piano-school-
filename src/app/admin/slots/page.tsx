@@ -347,6 +347,7 @@ export default function SlotsManagement() {
                   </label>
                   <input
                     type="time"
+                    step="300"
                     value={newSlot.startTime}
                     onChange={(e) => setNewSlot({ ...newSlot, startTime: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
@@ -358,6 +359,7 @@ export default function SlotsManagement() {
                   </label>
                   <input
                     type="time"
+                    step="300"
                     value={newSlot.endTime}
                     onChange={(e) => setNewSlot({ ...newSlot, endTime: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"

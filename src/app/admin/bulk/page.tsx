@@ -247,6 +247,7 @@ export default function BulkRegistration() {
                       <span className="text-sm text-gray-500 w-6">{index + 1}.</span>
                       <input
                         type="time"
+                        step="300"
                         value={range.startTime}
                         onChange={(e) => updateTimeRange(range.id, 'startTime', e.target.value)}
                         className={`flex-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent ${
@@ -256,6 +257,7 @@ export default function BulkRegistration() {
                       <span className="text-gray-400">〜</span>
                       <input
                         type="time"
+                        step="300"
                         value={range.endTime}
                         onChange={(e) => updateTimeRange(range.id, 'endTime', e.target.value)}
                         className={`flex-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent ${

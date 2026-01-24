@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { FiCalendar, FiClock, FiList, FiHome, FiLogOut, FiTrash2 } from 'react-icons/fi'
+import { FiCalendar, FiClock, FiList, FiHome, FiLogOut, FiTrash2, FiUserPlus } from 'react-icons/fi'
 
 export default function AdminLayout({
   children,
@@ -24,6 +24,7 @@ export default function AdminLayout({
     { href: '/admin/reservations', label: '予約一覧', icon: FiList },
     { href: '/admin/bulk', label: '空き枠を作成', icon: FiCalendar },
     { href: '/admin/bulk-delete', label: '空き枠を整理', icon: FiTrash2 },
+    { href: '/admin/book', label: '生徒の予約登録', icon: FiUserPlus },
   ]
 
   return (
