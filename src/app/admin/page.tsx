@@ -42,22 +42,31 @@ export default function AdminDashboard() {
       const today = format(new Date(), 'yyyy-MM-dd')
 
       // Fetch stats
-      const [slotsResult, availableSlotsResult, reservationsResult, upcomingResult, recentResult] = await Promise.all([
+      const [slotsResult, availableSlotsResult, reservationsResult, recentResult] = await Promise.all([
         supabase.from('time_slots').select('id', { count: 'exact' }),
         supabase.from('time_slots').select('id', { count: 'exact' }).eq('is_available', true).gte('date', today),
         supabase.from('reservations').select('id', { count: 'exact' }),
-        supabase.from('reservations').select('id', { count: 'exact' }).gte('date', today),
-        supabase.from('reservations').select('*').order('created_at', { ascending: false }).limit(5),
+        supabase.from('reservations').select('*, time_slots(date, start_time)').order('created_at', { ascending: false }).limit(5),
       ])
+
+      // Process recent reservations to get date from time_slots if not in reservations
+      const processedReservations = (recentResult.data || []).map((r: any) => ({
+        ...r,
+        date: r.date || r.time_slots?.date,
+        start_time: r.start_time || r.time_slots?.start_time,
+      }))
+
+      // Count upcoming reservations client-side
+      const upcomingCount = processedReservations.filter((r: any) => r.date && r.date >= today).length
 
       setStats({
         totalSlots: slotsResult.count || 0,
         availableSlots: availableSlotsResult.count || 0,
         totalReservations: reservationsResult.count || 0,
-        upcomingReservations: upcomingResult.count || 0,
+        upcomingReservations: upcomingCount,
       })
 
-      setRecentReservations(recentResult.data || [])
+      setRecentReservations(processedReservations)
       setIsLoading(false)
     }
 
@@ -187,7 +196,7 @@ export default function AdminDashboard() {
                 <div>
                   <p className="font-medium text-gray-800">{reservation.student_name}</p>
                   <p className="text-sm text-gray-500">
-                    {format(parseISO(reservation.date), 'M月d日（E）', { locale: ja })} {reservation.start_time?.slice(0, 5)}
+                    {reservation.date ? format(parseISO(reservation.date), 'M月d日（E）', { locale: ja }) : '日付不明'} {reservation.start_time?.slice(0, 5)}
                   </p>
                 </div>
                 <p className="text-xs text-gray-400">

@@ -34,14 +34,21 @@ export default function ReservationsPage() {
 
       const { data, error } = await supabase
         .from('reservations')
-        .select('*')
-        .order('date', { ascending: true })
-        .order('start_time', { ascending: true })
+        .select('*, time_slots(date, start_time, end_time)')
+        .order('created_at', { ascending: false })
 
       if (error) {
         console.error('Error fetching reservations:', error)
+        setReservations([])
       } else {
-        setReservations(data || [])
+        // Process to get date from time_slots if not in reservations
+        const processed = (data || []).map((r: any) => ({
+          ...r,
+          date: r.date || r.time_slots?.date,
+          start_time: r.start_time || r.time_slots?.start_time,
+          end_time: r.end_time || r.time_slots?.end_time,
+        }))
+        setReservations(processed)
       }
       setIsLoading(false)
     }
@@ -52,6 +59,7 @@ export default function ReservationsPage() {
   const today = format(new Date(), 'yyyy-MM-dd')
 
   const filteredReservations = reservations.filter((r) => {
+    if (!r.date) return filter === 'all'
     if (filter === 'upcoming') return r.date >= today
     if (filter === 'past') return r.date < today
     return true
@@ -134,7 +142,7 @@ export default function ReservationsPage() {
                         <FiCalendar className="w-4 h-4 text-gray-400" />
                         <div>
                           <p className="font-medium text-gray-800">
-                            {format(parseISO(reservation.date), 'M月d日（E）', { locale: ja })}
+                            {reservation.date ? format(parseISO(reservation.date), 'M月d日（E）', { locale: ja }) : '日付不明'}
                           </p>
                           <p className="text-sm text-gray-500">
                             {reservation.start_time?.slice(0, 5)} 〜 {reservation.end_time?.slice(0, 5)}
@@ -191,7 +199,7 @@ export default function ReservationsPage() {
                 <div>
                   <p className="text-sm text-gray-500">日時</p>
                   <p className="font-medium">
-                    {format(parseISO(selectedReservation.date), 'yyyy年M月d日（E）', { locale: ja })}
+                    {selectedReservation.date ? format(parseISO(selectedReservation.date), 'yyyy年M月d日（E）', { locale: ja }) : '日付不明'}
                   </p>
                   <p className="text-gray-600">
                     {selectedReservation.start_time?.slice(0, 5)} 〜 {selectedReservation.end_time?.slice(0, 5)}
