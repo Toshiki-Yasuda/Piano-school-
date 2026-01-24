@@ -22,8 +22,8 @@ export default function AdminLayout({
     { href: '/admin', label: 'ダッシュボード', icon: FiHome },
     { href: '/admin/slots', label: '空き時間管理', icon: FiClock },
     { href: '/admin/reservations', label: '予約一覧', icon: FiList },
-    { href: '/admin/bulk', label: '一括登録', icon: FiCalendar },
-    { href: '/admin/bulk-delete', label: '一括削除', icon: FiTrash2 },
+    { href: '/admin/bulk', label: '空き枠を作成', icon: FiCalendar },
+    { href: '/admin/bulk-delete', label: '空き枠を整理', icon: FiTrash2 },
   ]
 
   return (

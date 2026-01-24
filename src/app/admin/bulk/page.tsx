@@ -156,7 +156,7 @@ export default function BulkRegistration() {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-serif font-medium text-gray-800">一括登録</h2>
+      <h2 className="text-2xl font-serif font-medium text-gray-800">空き枠を作成</h2>
 
       <div className="grid lg:grid-cols-2 gap-6">
         {/* Settings */}
@@ -338,7 +338,7 @@ export default function BulkRegistration() {
       {/* Confirmation Dialog */}
       <ConfirmDialog
         isOpen={showConfirm}
-        title="一括登録の確認"
+        title="空き枠作成の確認"
         message={`${previewSlots.length}件の空き時間を登録します。よろしいですか？`}
         confirmLabel="登録する"
         cancelLabel="キャンセル"

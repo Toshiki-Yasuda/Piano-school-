@@ -106,7 +106,7 @@ export default function BulkDelete() {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-serif font-medium text-gray-800">一括削除</h2>
+      <h2 className="text-2xl font-serif font-medium text-gray-800">空き枠を整理</h2>
 
       {/* Date Range Selection */}
       <div className="bg-white rounded-lg shadow-sm p-6">
