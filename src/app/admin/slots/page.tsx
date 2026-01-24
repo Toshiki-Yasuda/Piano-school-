@@ -5,6 +5,7 @@ import { format, addMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameM
 import { ja } from 'date-fns/locale'
 import { FiChevronLeft, FiChevronRight, FiPlus, FiTrash2, FiX } from 'react-icons/fi'
 import { supabase } from '@/lib/supabase'
+import ConfirmDialog from '@/components/ConfirmDialog'
 
 interface TimeSlot {
   id: string
@@ -22,6 +23,7 @@ export default function SlotsManagement() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [newSlot, setNewSlot] = useState({ startTime: '10:00', endTime: '10:45' })
   const [isSaving, setIsSaving] = useState(false)
+  const [deleteTarget, setDeleteTarget] = useState<string | null>(null)
 
   // Fetch all slots
   useEffect(() => {
@@ -105,22 +107,21 @@ export default function SlotsManagement() {
   }
 
   // Delete slot
-  const handleDeleteSlot = async (slotId: string) => {
-    if (!supabase) return
-
-    if (!confirm('この空き時間を削除しますか？')) return
+  const handleDeleteSlot = async () => {
+    if (!supabase || !deleteTarget) return
 
     const { error } = await supabase
       .from('time_slots')
       .delete()
-      .eq('id', slotId)
+      .eq('id', deleteTarget)
 
     if (error) {
       console.error('Error deleting slot:', error)
       alert('削除に失敗しました')
     } else {
-      setSlots(slots.filter(slot => slot.id !== slotId))
+      setSlots(slots.filter(slot => slot.id !== deleteTarget))
     }
+    setDeleteTarget(null)
   }
 
   if (isLoading) {
@@ -267,7 +268,7 @@ export default function SlotsManagement() {
                       </div>
                       {slot.is_available && (
                         <button
-                          onClick={() => handleDeleteSlot(slot.id)}
+                          onClick={() => setDeleteTarget(slot.id)}
                           className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
                         >
                           <FiTrash2 className="w-4 h-4" />
@@ -285,6 +286,18 @@ export default function SlotsManagement() {
           )}
         </div>
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={!!deleteTarget}
+        title="空き時間を削除"
+        message="この空き時間を削除しますか？削除すると元に戻せません。"
+        confirmLabel="削除する"
+        cancelLabel="キャンセル"
+        onConfirm={handleDeleteSlot}
+        onCancel={() => setDeleteTarget(null)}
+        isDestructive
+      />
 
       {/* Add Slot Modal */}
       {isModalOpen && (

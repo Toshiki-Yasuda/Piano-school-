@@ -1,8 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { FiCalendar, FiClock, FiList, FiHome } from 'react-icons/fi'
+import { usePathname, useRouter } from 'next/navigation'
+import { FiCalendar, FiClock, FiList, FiHome, FiLogOut } from 'react-icons/fi'
 
 export default function AdminLayout({
   children,
@@ -10,6 +10,13 @@ export default function AdminLayout({
   children: React.ReactNode
 }) {
   const pathname = usePathname()
+  const router = useRouter()
+
+  const handleLogout = async () => {
+    await fetch('/api/admin/logout', { method: 'POST' })
+    router.push('/admin/login')
+    router.refresh()
+  }
 
   const navItems = [
     { href: '/admin', label: 'ダッシュボード', icon: FiHome },
@@ -27,9 +34,18 @@ export default function AdminLayout({
             <h1 className="text-xl font-serif font-medium text-gray-800">
               🎹 ピアノ教室 管理画面
             </h1>
-            <Link href="/" className="text-sm text-primary-600 hover:text-primary-700">
-              ← サイトに戻る
-            </Link>
+            <div className="flex items-center gap-4">
+              <Link href="/" className="text-sm text-primary-600 hover:text-primary-700">
+                ← サイトに戻る
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700"
+              >
+                <FiLogOut className="w-4 h-4" />
+                ログアウト
+              </button>
+            </div>
           </div>
         </div>
       </header>

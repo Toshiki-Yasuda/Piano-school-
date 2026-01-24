@@ -5,6 +5,7 @@ import { format, addDays, startOfMonth, endOfMonth, eachDayOfInterval, getDay } 
 import { ja } from 'date-fns/locale'
 import { FiPlus, FiTrash2, FiCheck } from 'react-icons/fi'
 import { supabase } from '@/lib/supabase'
+import ConfirmDialog from '@/components/ConfirmDialog'
 
 interface TimeRange {
   id: string
@@ -31,6 +32,7 @@ export default function BulkRegistration() {
   ])
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [result, setResult] = useState<{ success: boolean; count: number } | null>(null)
+  const [showConfirm, setShowConfirm] = useState(false)
 
   const toggleDay = (day: number) => {
     setSelectedDays((prev) =>
@@ -285,7 +287,7 @@ export default function BulkRegistration() {
               </div>
 
               <button
-                onClick={handleSubmit}
+                onClick={() => setShowConfirm(true)}
                 disabled={isSubmitting || previewSlots.length === 0}
                 className="w-full px-4 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
               >
@@ -306,6 +308,20 @@ export default function BulkRegistration() {
           <li>プレビューを確認して「一括登録する」をクリック</li>
         </ol>
       </div>
+
+      {/* Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={showConfirm}
+        title="一括登録の確認"
+        message={`${previewSlots.length}件の空き時間を登録します。よろしいですか？`}
+        confirmLabel="登録する"
+        cancelLabel="キャンセル"
+        onConfirm={() => {
+          setShowConfirm(false)
+          handleSubmit()
+        }}
+        onCancel={() => setShowConfirm(false)}
+      />
     </div>
   )
 }

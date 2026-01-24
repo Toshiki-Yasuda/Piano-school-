@@ -3,8 +3,9 @@
 import { useState, useEffect } from 'react'
 import { format, parseISO } from 'date-fns'
 import { ja } from 'date-fns/locale'
-import { FiCalendar, FiUser, FiClock, FiMail, FiPhone, FiMessageSquare } from 'react-icons/fi'
+import { FiCalendar, FiUser, FiClock, FiMail, FiPhone, FiMessageSquare, FiX } from 'react-icons/fi'
 import { supabase } from '@/lib/supabase'
+import ConfirmDialog from '@/components/ConfirmDialog'
 
 interface Reservation {
   id: string
@@ -24,6 +25,35 @@ export default function ReservationsPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [filter, setFilter] = useState<'all' | 'upcoming' | 'past'>('upcoming')
   const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null)
+  const [cancelTarget, setCancelTarget] = useState<Reservation | null>(null)
+  const [isCancelling, setIsCancelling] = useState(false)
+
+  const handleCancelReservation = async () => {
+    if (!cancelTarget) return
+
+    setIsCancelling(true)
+    try {
+      const res = await fetch('/api/reservation/cancel', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reservationId: cancelTarget.id }),
+      })
+
+      if (res.ok) {
+        // Remove from local state
+        setReservations(reservations.filter(r => r.id !== cancelTarget.id))
+        setSelectedReservation(null)
+      } else {
+        alert('キャンセルに失敗しました')
+      }
+    } catch (error) {
+      console.error('Cancel error:', error)
+      alert('キャンセルに失敗しました')
+    } finally {
+      setIsCancelling(false)
+      setCancelTarget(null)
+    }
+  }
 
   useEffect(() => {
     const fetchReservations = async () => {
@@ -260,17 +290,36 @@ export default function ReservationsPage() {
               </div>
             </div>
 
-            <div className="mt-6 pt-4 border-t">
+            <div className="mt-6 pt-4 border-t flex gap-3">
               <button
                 onClick={() => setSelectedReservation(null)}
-                className="w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
               >
                 閉じる
+              </button>
+              <button
+                onClick={() => setCancelTarget(selectedReservation)}
+                className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center justify-center gap-2"
+              >
+                <FiX className="w-4 h-4" />
+                予約をキャンセル
               </button>
             </div>
           </div>
         </div>
       )}
+
+      {/* Cancel Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={!!cancelTarget}
+        title="予約のキャンセル"
+        message={cancelTarget ? `${cancelTarget.student_name}さんの予約をキャンセルしますか？キャンセルすると空き枠に戻ります。` : ''}
+        confirmLabel={isCancelling ? 'キャンセル中...' : 'キャンセルする'}
+        cancelLabel="戻る"
+        onConfirm={handleCancelReservation}
+        onCancel={() => setCancelTarget(null)}
+        isDestructive
+      />
     </div>
   )
 }
