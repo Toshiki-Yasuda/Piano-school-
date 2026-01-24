@@ -77,9 +77,24 @@ export default function SlotsManagement() {
     setSelectedDate(date)
   }
 
+  // Validate time
+  const validateTime = (start: string, end: string): string | null => {
+    if (!start || !end) return '開始時間と終了時間を入力してください'
+    if (start >= end) return '終了時間は開始時間より後に設定してください'
+    return null
+  }
+
+  const timeError = validateTime(newSlot.startTime, newSlot.endTime)
+
   // Add new slot
   const handleAddSlot = async () => {
     if (!selectedDate || !supabase) return
+
+    const error = validateTime(newSlot.startTime, newSlot.endTime)
+    if (error) {
+      alert(error)
+      return
+    }
 
     setIsSaving(true)
     const dateStr = format(selectedDate, 'yyyy-MM-dd')
@@ -363,6 +378,10 @@ export default function SlotsManagement() {
                 </div>
               </div>
 
+              {timeError && (
+                <p className="text-sm text-red-500">{timeError}</p>
+              )}
+
               <div className="flex gap-3 pt-4">
                 <button
                   onClick={() => setIsModalOpen(false)}
@@ -372,8 +391,8 @@ export default function SlotsManagement() {
                 </button>
                 <button
                   onClick={handleAddSlot}
-                  disabled={isSaving}
-                  className="flex-1 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50"
+                  disabled={isSaving || !!timeError}
+                  className="flex-1 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isSaving ? '保存中...' : '追加する'}
                 </button>

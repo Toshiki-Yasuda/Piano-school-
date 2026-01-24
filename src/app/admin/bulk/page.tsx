@@ -68,6 +68,28 @@ export default function BulkRegistration() {
     )
   }
 
+  // Validate time ranges
+  const validateTimeRange = (start: string, end: string): string | null => {
+    if (!start || !end) return '開始時間と終了時間を入力してください'
+    if (start >= end) return '終了時間は開始時間より後に設定してください'
+    return null
+  }
+
+  // Check all time ranges for errors
+  const getTimeRangeErrors = (): Map<string, string> => {
+    const errors = new Map<string, string>()
+    timeRanges.forEach((range) => {
+      const error = validateTimeRange(range.startTime, range.endTime)
+      if (error) {
+        errors.set(range.id, error)
+      }
+    })
+    return errors
+  }
+
+  const timeRangeErrors = getTimeRangeErrors()
+  const hasTimeErrors = timeRangeErrors.size > 0
+
   const calculateSlots = () => {
     if (!startDate || !endDate || selectedDays.length === 0 || timeRanges.length === 0) {
       return []
@@ -223,32 +245,44 @@ export default function BulkRegistration() {
             </div>
 
             <div className="space-y-3">
-              {timeRanges.map((range, index) => (
-                <div key={range.id} className="flex items-center gap-3">
-                  <span className="text-sm text-gray-500 w-6">{index + 1}.</span>
-                  <input
-                    type="time"
-                    value={range.startTime}
-                    onChange={(e) => updateTimeRange(range.id, 'startTime', e.target.value)}
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                  />
-                  <span className="text-gray-400">〜</span>
-                  <input
-                    type="time"
-                    value={range.endTime}
-                    onChange={(e) => updateTimeRange(range.id, 'endTime', e.target.value)}
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                  />
-                  {timeRanges.length > 1 && (
-                    <button
-                      onClick={() => removeTimeRange(range.id)}
-                      className="p-2 text-red-500 hover:bg-red-50 rounded-lg"
-                    >
-                      <FiTrash2 className="w-4 h-4" />
-                    </button>
-                  )}
-                </div>
-              ))}
+              {timeRanges.map((range, index) => {
+                const error = timeRangeErrors.get(range.id)
+                return (
+                  <div key={range.id} className="space-y-1">
+                    <div className="flex items-center gap-3">
+                      <span className="text-sm text-gray-500 w-6">{index + 1}.</span>
+                      <input
+                        type="time"
+                        value={range.startTime}
+                        onChange={(e) => updateTimeRange(range.id, 'startTime', e.target.value)}
+                        className={`flex-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent ${
+                          error ? 'border-red-300 bg-red-50' : 'border-gray-300'
+                        }`}
+                      />
+                      <span className="text-gray-400">〜</span>
+                      <input
+                        type="time"
+                        value={range.endTime}
+                        onChange={(e) => updateTimeRange(range.id, 'endTime', e.target.value)}
+                        className={`flex-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent ${
+                          error ? 'border-red-300 bg-red-50' : 'border-gray-300'
+                        }`}
+                      />
+                      {timeRanges.length > 1 && (
+                        <button
+                          onClick={() => removeTimeRange(range.id)}
+                          className="p-2 text-red-500 hover:bg-red-50 rounded-lg"
+                        >
+                          <FiTrash2 className="w-4 h-4" />
+                        </button>
+                      )}
+                    </div>
+                    {error && (
+                      <p className="text-sm text-red-500 ml-9">{error}</p>
+                    )}
+                  </div>
+                )
+              })}
             </div>
 
             <p className="text-sm text-gray-500 mt-3">
@@ -312,9 +346,14 @@ export default function BulkRegistration() {
                 )}
               </div>
 
+              {hasTimeErrors && (
+                <p className="text-sm text-red-500 mb-2 text-center">
+                  時間の設定にエラーがあります
+                </p>
+              )}
               <button
                 onClick={() => setShowConfirm(true)}
-                disabled={isSubmitting || previewSlots.length === 0}
+                disabled={isSubmitting || previewSlots.length === 0 || hasTimeErrors}
                 className="w-full px-4 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
               >
                 {isSubmitting ? '登録中...' : `${previewSlots.length}件を一括登録する`}
