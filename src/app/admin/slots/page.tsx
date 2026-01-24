@@ -84,6 +84,20 @@ export default function SlotsManagement() {
     setIsSaving(true)
     const dateStr = format(selectedDate, 'yyyy-MM-dd')
 
+    // Check for duplicate
+    const { data: existing } = await supabase
+      .from('time_slots')
+      .select('id')
+      .eq('date', dateStr)
+      .eq('start_time', newSlot.startTime)
+      .single()
+
+    if (existing) {
+      alert('この日時の空き時間は既に登録されています')
+      setIsSaving(false)
+      return
+    }
+
     const { data, error } = await supabase
       .from('time_slots')
       .insert({
@@ -97,7 +111,11 @@ export default function SlotsManagement() {
 
     if (error) {
       console.error('Error adding slot:', error)
-      alert('空き時間の追加に失敗しました')
+      if (error.code === '23505') {
+        alert('この日時の空き時間は既に登録されています')
+      } else {
+        alert('空き時間の追加に失敗しました')
+      }
     } else {
       setSlots([...slots, data])
       setIsModalOpen(false)

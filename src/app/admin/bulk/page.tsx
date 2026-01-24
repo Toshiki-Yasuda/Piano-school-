@@ -102,7 +102,29 @@ export default function BulkRegistration() {
     setIsSubmitting(true)
     setResult(null)
 
-    const slotsToInsert = previewSlots.map((slot) => ({
+    // Check for existing slots to avoid duplicates
+    const { data: existingSlots } = await supabase
+      .from('time_slots')
+      .select('date, start_time')
+      .gte('date', startDate)
+      .lte('date', endDate)
+
+    const existingSet = new Set(
+      (existingSlots || []).map(s => `${s.date}_${s.start_time}`)
+    )
+
+    // Filter out duplicates
+    const newSlots = previewSlots.filter(
+      slot => !existingSet.has(`${slot.date}_${slot.startTime}`)
+    )
+
+    if (newSlots.length === 0) {
+      alert('すべての時間枠が既に登録されています')
+      setIsSubmitting(false)
+      return
+    }
+
+    const slotsToInsert = newSlots.map((slot) => ({
       date: slot.date,
       start_time: slot.startTime,
       end_time: slot.endTime,
@@ -119,6 +141,10 @@ export default function BulkRegistration() {
       alert('登録に失敗しました: ' + error.message)
       setResult({ success: false, count: 0 })
     } else {
+      const skipped = previewSlots.length - newSlots.length
+      if (skipped > 0) {
+        alert(`${data?.length || 0}件を登録しました（${skipped}件は既に登録済みのためスキップ）`)
+      }
       setResult({ success: true, count: data?.length || 0 })
       // Reset form
       setSelectedDays([])
