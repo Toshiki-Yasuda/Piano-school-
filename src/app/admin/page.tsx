@@ -6,6 +6,7 @@ import { format, parseISO } from 'date-fns'
 import { ja } from 'date-fns/locale'
 import { FiClock, FiUsers, FiCalendar, FiArrowRight } from 'react-icons/fi'
 import { supabase } from '@/lib/supabase'
+import type { ReservationWithSlot } from '@/lib/types'
 
 interface Stats {
   totalSlots: number
@@ -50,14 +51,16 @@ export default function AdminDashboard() {
       ])
 
       // Process recent reservations to get date from time_slots if not in reservations
-      const processedReservations = (recentResult.data || []).map((r: any) => ({
-        ...r,
-        date: r.date || r.time_slots?.date,
-        start_time: r.start_time || r.time_slots?.start_time,
+      const processedReservations: RecentReservation[] = (recentResult.data as ReservationWithSlot[] || []).map((r) => ({
+        id: r.id,
+        student_name: r.student_name,
+        date: r.date || r.time_slots?.date || '',
+        start_time: r.start_time || r.time_slots?.start_time || '',
+        created_at: r.created_at,
       }))
 
       // Count upcoming reservations client-side
-      const upcomingCount = processedReservations.filter((r: any) => r.date && r.date >= today).length
+      const upcomingCount = processedReservations.filter((r) => r.date && r.date >= today).length
 
       setStats({
         totalSlots: slotsResult.count || 0,

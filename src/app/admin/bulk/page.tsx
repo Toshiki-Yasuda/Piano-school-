@@ -1,11 +1,12 @@
 'use client'
 
 import { useState } from 'react'
-import { format, addDays, startOfMonth, endOfMonth, eachDayOfInterval, getDay } from 'date-fns'
+import { format, addMonths, startOfMonth, endOfMonth, eachDayOfInterval, getDay } from 'date-fns'
 import { ja } from 'date-fns/locale'
 import { FiPlus, FiTrash2, FiCheck } from 'react-icons/fi'
 import { supabase } from '@/lib/supabase'
 import ConfirmDialog from '@/components/ConfirmDialog'
+import { validateTimeRange } from '@/lib/types'
 
 interface TimeRange {
   id: string
@@ -24,8 +25,8 @@ const WEEKDAYS = [
 ]
 
 export default function BulkRegistration() {
-  const [startDate, setStartDate] = useState(format(startOfMonth(addDays(new Date(), 30)), 'yyyy-MM-dd'))
-  const [endDate, setEndDate] = useState(format(endOfMonth(addDays(new Date(), 30)), 'yyyy-MM-dd'))
+  const [startDate, setStartDate] = useState(format(startOfMonth(addMonths(new Date(), 1)), 'yyyy-MM-dd'))
+  const [endDate, setEndDate] = useState(format(endOfMonth(addMonths(new Date(), 1)), 'yyyy-MM-dd'))
   const [selectedDays, setSelectedDays] = useState<number[]>([])
   const [timeRanges, setTimeRanges] = useState<TimeRange[]>([
     { id: '1', startTime: '10:00', endTime: '10:45' },
@@ -66,13 +67,6 @@ export default function BulkRegistration() {
     setTimeRanges(
       timeRanges.map((t) => (t.id === id ? { ...t, [field]: value } : t))
     )
-  }
-
-  // Validate time ranges
-  const validateTimeRange = (start: string, end: string): string | null => {
-    if (!start || !end) return '開始時間と終了時間を入力してください'
-    if (start >= end) return '終了時間は開始時間より後に設定してください'
-    return null
   }
 
   // Check all time ranges for errors

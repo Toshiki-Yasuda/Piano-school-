@@ -6,26 +6,14 @@ import { ja } from 'date-fns/locale'
 import { FiCalendar, FiUser, FiClock, FiMail, FiPhone, FiMessageSquare, FiX } from 'react-icons/fi'
 import { supabase } from '@/lib/supabase'
 import ConfirmDialog from '@/components/ConfirmDialog'
-
-interface Reservation {
-  id: string
-  student_name: string
-  parent_name: string
-  email: string
-  phone: string
-  date: string
-  start_time: string
-  end_time: string
-  message: string | null
-  created_at: string
-}
+import type { ReservationWithSlot, ProcessedReservation } from '@/lib/types'
 
 export default function ReservationsPage() {
-  const [reservations, setReservations] = useState<Reservation[]>([])
+  const [reservations, setReservations] = useState<ProcessedReservation[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [filter, setFilter] = useState<'all' | 'upcoming' | 'past'>('upcoming')
-  const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null)
-  const [cancelTarget, setCancelTarget] = useState<Reservation | null>(null)
+  const [selectedReservation, setSelectedReservation] = useState<ProcessedReservation | null>(null)
+  const [cancelTarget, setCancelTarget] = useState<ProcessedReservation | null>(null)
   const [isCancelling, setIsCancelling] = useState(false)
 
   const handleCancelReservation = async () => {
@@ -72,11 +60,18 @@ export default function ReservationsPage() {
         setReservations([])
       } else {
         // Process to get date from time_slots if not in reservations
-        const processed = (data || []).map((r: any) => ({
-          ...r,
-          date: r.date || r.time_slots?.date,
-          start_time: r.start_time || r.time_slots?.start_time,
-          end_time: r.end_time || r.time_slots?.end_time,
+        const processed: ProcessedReservation[] = (data as ReservationWithSlot[] || []).map((r) => ({
+          id: r.id,
+          time_slot_id: r.time_slot_id,
+          student_name: r.student_name,
+          parent_name: r.parent_name,
+          email: r.email,
+          phone: r.phone,
+          message: r.message,
+          created_at: r.created_at,
+          date: r.date || r.time_slots?.date || '',
+          start_time: r.start_time || r.time_slots?.start_time || '',
+          end_time: r.end_time || r.time_slots?.end_time || '',
         }))
         setReservations(processed)
       }

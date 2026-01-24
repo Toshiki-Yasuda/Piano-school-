@@ -57,7 +57,11 @@ export async function POST(request: NextRequest) {
 
       if (updateError) {
         console.error('Error updating time slot:', updateError)
-        // Don't fail the request, but log the error
+        // Reservation was deleted but slot wasn't updated - return partial success with warning
+        return NextResponse.json({
+          success: true,
+          warning: 'スロットの更新に失敗しました。手動で確認してください。'
+        })
       }
     }
 

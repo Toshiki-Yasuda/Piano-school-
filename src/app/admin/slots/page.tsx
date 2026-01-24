@@ -1,19 +1,13 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { format, addMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isToday, isBefore, startOfDay } from 'date-fns'
+import { format, addMonths, startOfMonth, endOfMonth, eachDayOfInterval, isToday, isBefore, startOfDay } from 'date-fns'
 import { ja } from 'date-fns/locale'
 import { FiChevronLeft, FiChevronRight, FiPlus, FiTrash2, FiX } from 'react-icons/fi'
 import { supabase } from '@/lib/supabase'
 import ConfirmDialog from '@/components/ConfirmDialog'
-
-interface TimeSlot {
-  id: string
-  date: string
-  start_time: string
-  end_time: string
-  is_available: boolean
-}
+import { validateTimeRange } from '@/lib/types'
+import type { TimeSlot } from '@/lib/types'
 
 export default function SlotsManagement() {
   const [currentMonth, setCurrentMonth] = useState(new Date())
@@ -77,20 +71,13 @@ export default function SlotsManagement() {
     setSelectedDate(date)
   }
 
-  // Validate time
-  const validateTime = (start: string, end: string): string | null => {
-    if (!start || !end) return '開始時間と終了時間を入力してください'
-    if (start >= end) return '終了時間は開始時間より後に設定してください'
-    return null
-  }
-
-  const timeError = validateTime(newSlot.startTime, newSlot.endTime)
+  const timeError = validateTimeRange(newSlot.startTime, newSlot.endTime)
 
   // Add new slot
   const handleAddSlot = async () => {
     if (!selectedDate || !supabase) return
 
-    const validationError = validateTime(newSlot.startTime, newSlot.endTime)
+    const validationError = validateTimeRange(newSlot.startTime, newSlot.endTime)
     if (validationError) {
       alert(validationError)
       return
