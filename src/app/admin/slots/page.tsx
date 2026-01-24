@@ -90,9 +90,9 @@ export default function SlotsManagement() {
   const handleAddSlot = async () => {
     if (!selectedDate || !supabase) return
 
-    const error = validateTime(newSlot.startTime, newSlot.endTime)
-    if (error) {
-      alert(error)
+    const validationError = validateTime(newSlot.startTime, newSlot.endTime)
+    if (validationError) {
+      alert(validationError)
       return
     }
 
