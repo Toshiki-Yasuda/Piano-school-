@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { format } from 'date-fns'
+import { format, parseISO } from 'date-fns'
 import { ja } from 'date-fns/locale'
 import { FiCalendar, FiUser, FiClock, FiMail, FiPhone, FiMessageSquare } from 'react-icons/fi'
 import { supabase } from '@/lib/supabase'
@@ -134,10 +134,10 @@ export default function ReservationsPage() {
                         <FiCalendar className="w-4 h-4 text-gray-400" />
                         <div>
                           <p className="font-medium text-gray-800">
-                            {format(new Date(reservation.date), 'M月d日（E）', { locale: ja })}
+                            {format(parseISO(reservation.date), 'M月d日（E）', { locale: ja })}
                           </p>
                           <p className="text-sm text-gray-500">
-                            {reservation.start_time.slice(0, 5)} 〜 {reservation.end_time.slice(0, 5)}
+                            {reservation.start_time?.slice(0, 5)} 〜 {reservation.end_time?.slice(0, 5)}
                           </p>
                         </div>
                       </div>
@@ -153,7 +153,7 @@ export default function ReservationsPage() {
                       <p className="text-sm text-gray-500">{reservation.phone}</p>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {format(new Date(reservation.created_at), 'M/d HH:mm')}
+                      {reservation.created_at ? format(parseISO(reservation.created_at), 'M/d HH:mm') : ''}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right">
                       <button
@@ -191,10 +191,10 @@ export default function ReservationsPage() {
                 <div>
                   <p className="text-sm text-gray-500">日時</p>
                   <p className="font-medium">
-                    {format(new Date(selectedReservation.date), 'yyyy年M月d日（E）', { locale: ja })}
+                    {format(parseISO(selectedReservation.date), 'yyyy年M月d日（E）', { locale: ja })}
                   </p>
                   <p className="text-gray-600">
-                    {selectedReservation.start_time.slice(0, 5)} 〜 {selectedReservation.end_time.slice(0, 5)}
+                    {selectedReservation.start_time?.slice(0, 5)} 〜 {selectedReservation.end_time?.slice(0, 5)}
                   </p>
                 </div>
               </div>
@@ -246,7 +246,7 @@ export default function ReservationsPage() {
                 <div>
                   <p className="text-sm text-gray-500">予約受付日時</p>
                   <p className="font-medium">
-                    {format(new Date(selectedReservation.created_at), 'yyyy年M月d日 HH:mm', { locale: ja })}
+                    {selectedReservation.created_at ? format(parseISO(selectedReservation.created_at), 'yyyy年M月d日 HH:mm', { locale: ja }) : ''}
                   </p>
                 </div>
               </div>

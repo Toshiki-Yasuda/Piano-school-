@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { format } from 'date-fns'
+import { format, parseISO } from 'date-fns'
 import { ja } from 'date-fns/locale'
 import { FiClock, FiUsers, FiCalendar, FiArrowRight } from 'react-icons/fi'
 import { supabase } from '@/lib/supabase'
@@ -187,11 +187,11 @@ export default function AdminDashboard() {
                 <div>
                   <p className="font-medium text-gray-800">{reservation.student_name}</p>
                   <p className="text-sm text-gray-500">
-                    {format(new Date(reservation.date), 'M月d日（E）', { locale: ja })} {reservation.start_time.slice(0, 5)}
+                    {format(parseISO(reservation.date), 'M月d日（E）', { locale: ja })} {reservation.start_time?.slice(0, 5)}
                   </p>
                 </div>
                 <p className="text-xs text-gray-400">
-                  {format(new Date(reservation.created_at), 'M/d HH:mm')}
+                  {reservation.created_at ? format(parseISO(reservation.created_at), 'M/d HH:mm') : ''}
                 </p>
               </div>
             ))}
