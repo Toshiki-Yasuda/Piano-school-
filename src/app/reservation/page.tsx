@@ -7,6 +7,7 @@ import { FiCheckCircle, FiCalendar } from 'react-icons/fi'
 import Calendar from '@/components/reservation/Calendar'
 import TimeSlotPicker from '@/components/reservation/TimeSlotPicker'
 import ReservationForm, { ReservationFormData } from '@/components/reservation/ReservationForm'
+import { supabase } from '@/lib/supabase'
 
 interface TimeSlot {
   id: string
@@ -14,62 +15,6 @@ interface TimeSlot {
   start_time: string
   end_time: string
   is_available: boolean
-}
-
-// Demo data for demonstration
-const generateDemoSlots = (): TimeSlot[] => {
-  const slots: TimeSlot[] = []
-  const today = new Date()
-
-  // Generate slots for the next 60 days
-  for (let i = 1; i <= 60; i++) {
-    const date = new Date(today)
-    date.setDate(today.getDate() + i)
-
-    // Skip Sundays
-    if (date.getDay() === 0) continue
-
-    const dateStr = format(date, 'yyyy-MM-dd')
-
-    // Random number of slots per day (1-3)
-    const numSlots = Math.floor(Math.random() * 3) + 1
-    const possibleTimes = [
-      { start: '14:00:00', end: '14:45:00' },
-      { start: '15:00:00', end: '15:45:00' },
-      { start: '16:00:00', end: '16:45:00' },
-      { start: '17:00:00', end: '17:45:00' },
-      { start: '18:00:00', end: '18:45:00' },
-      { start: '19:00:00', end: '19:45:00' },
-    ]
-
-    // Saturday has different times
-    if (date.getDay() === 6) {
-      possibleTimes.length = 0
-      possibleTimes.push(
-        { start: '10:00:00', end: '10:45:00' },
-        { start: '11:00:00', end: '11:45:00' },
-        { start: '14:00:00', end: '14:45:00' },
-        { start: '15:00:00', end: '15:45:00' },
-        { start: '16:00:00', end: '16:45:00' },
-        { start: '17:00:00', end: '17:45:00' },
-      )
-    }
-
-    const shuffled = possibleTimes.sort(() => 0.5 - Math.random())
-    const selectedTimes = shuffled.slice(0, numSlots)
-
-    selectedTimes.forEach((time, index) => {
-      slots.push({
-        id: `${dateStr}-${index}`,
-        date: dateStr,
-        start_time: time.start,
-        end_time: time.end,
-        is_available: true,
-      })
-    })
-  }
-
-  return slots
 }
 
 export default function ReservationPage() {
@@ -80,16 +25,39 @@ export default function ReservationPage() {
   const [isLoadingSlots, setIsLoadingSlots] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isComplete, setIsComplete] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [reservationDetails, setReservationDetails] = useState<{
     date: string
     time: string
     name: string
   } | null>(null)
 
-  // Initialize demo data
+  // Fetch slots from Supabase
   useEffect(() => {
-    const slots = generateDemoSlots()
-    setAllSlots(slots)
+    const fetchSlots = async () => {
+      if (!supabase) {
+        console.log('Supabase not configured')
+        setIsLoading(false)
+        return
+      }
+
+      const { data, error } = await supabase
+        .from('time_slots')
+        .select('*')
+        .eq('is_available', true)
+        .gte('date', format(new Date(), 'yyyy-MM-dd'))
+        .order('date', { ascending: true })
+        .order('start_time', { ascending: true })
+
+      if (error) {
+        console.error('Error fetching slots:', error)
+      } else {
+        setAllSlots(data || [])
+      }
+      setIsLoading(false)
+    }
+
+    fetchSlots()
   }, [])
 
   // Get available dates
@@ -99,9 +67,6 @@ export default function ReservationPage() {
   const fetchSlotsForDate = useCallback(async (date: Date) => {
     setIsLoadingSlots(true)
     setSelectedSlot(null)
-
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 300))
 
     const dateStr = format(date, 'yyyy-MM-dd')
     const slots = allSlots.filter((slot) => slot.date === dateStr && slot.is_available)
@@ -125,7 +90,6 @@ export default function ReservationPage() {
     setIsSubmitting(true)
 
     try {
-      // Call API to create reservation
       const response = await fetch('/api/reservation', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -143,9 +107,7 @@ export default function ReservationPage() {
       if (result.success) {
         // Update local state to remove the booked slot
         setAllSlots((prev) =>
-          prev.map((slot) =>
-            slot.id === selectedSlot.id ? { ...slot, is_available: false } : slot
-          )
+          prev.filter((slot) => slot.id !== selectedSlot.id)
         )
 
         setReservationDetails({
@@ -163,6 +125,18 @@ export default function ReservationPage() {
     } finally {
       setIsSubmitting(false)
     }
+  }
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-20">
+        <div className="max-w-xl mx-auto px-4 text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary-600 border-t-transparent mx-auto"></div>
+          <p className="mt-4 text-gray-600">読み込み中...</p>
+        </div>
+      </div>
+    )
   }
 
   // Completion screen
@@ -264,57 +238,64 @@ export default function ReservationPage() {
             </div>
           </div>
 
-          <div className="grid lg:grid-cols-3 gap-8">
-            {/* Calendar */}
-            <div className="lg:col-span-1">
-              <Calendar
-                availableDates={availableDates}
-                selectedDate={selectedDate}
-                onDateSelect={handleDateSelect}
-              />
+          {allSlots.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-gray-500 text-lg">現在、予約可能な空き枠がありません。</p>
+              <p className="text-gray-400 mt-2">しばらくしてから再度ご確認ください。</p>
             </div>
-
-            {/* Time Slots */}
-            <div className="lg:col-span-1">
-              {selectedDate ? (
-                <TimeSlotPicker
-                  slots={slotsForDate}
-                  selectedSlot={selectedSlot}
-                  onSlotSelect={handleSlotSelect}
-                  isLoading={isLoadingSlots}
+          ) : (
+            <div className="grid lg:grid-cols-3 gap-8">
+              {/* Calendar */}
+              <div className="lg:col-span-1">
+                <Calendar
+                  availableDates={availableDates}
+                  selectedDate={selectedDate}
+                  onDateSelect={handleDateSelect}
                 />
-              ) : (
-                <div className="bg-white rounded-2xl shadow-lg p-6 text-center">
-                  <FiCalendar className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                  <p className="text-gray-500">
-                    カレンダーから日付を選択してください。
-                  </p>
-                </div>
-              )}
-            </div>
+              </div>
 
-            {/* Reservation Form */}
-            <div className="lg:col-span-1">
-              {selectedSlot && selectedDate ? (
-                <ReservationForm
-                  selectedDate={format(selectedDate, 'yyyy年M月d日（E）', { locale: ja })}
-                  selectedTime={`${selectedSlot.start_time.slice(0, 5)} 〜 ${selectedSlot.end_time.slice(0, 5)}`}
-                  slotId={selectedSlot.id}
-                  onSubmit={handleSubmit}
-                  isSubmitting={isSubmitting}
-                />
-              ) : (
-                <div className="bg-white rounded-2xl shadow-lg p-6 text-center">
-                  <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-2xl text-gray-400">3</span>
+              {/* Time Slots */}
+              <div className="lg:col-span-1">
+                {selectedDate ? (
+                  <TimeSlotPicker
+                    slots={slotsForDate}
+                    selectedSlot={selectedSlot}
+                    onSlotSelect={handleSlotSelect}
+                    isLoading={isLoadingSlots}
+                  />
+                ) : (
+                  <div className="bg-white rounded-2xl shadow-lg p-6 text-center">
+                    <FiCalendar className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+                    <p className="text-gray-500">
+                      カレンダーから日付を選択してください。
+                    </p>
                   </div>
-                  <p className="text-gray-500">
-                    日時を選択すると、予約フォームが表示されます。
-                  </p>
-                </div>
-              )}
+                )}
+              </div>
+
+              {/* Reservation Form */}
+              <div className="lg:col-span-1">
+                {selectedSlot && selectedDate ? (
+                  <ReservationForm
+                    selectedDate={format(selectedDate, 'yyyy年M月d日（E）', { locale: ja })}
+                    selectedTime={`${selectedSlot.start_time.slice(0, 5)} 〜 ${selectedSlot.end_time.slice(0, 5)}`}
+                    slotId={selectedSlot.id}
+                    onSubmit={handleSubmit}
+                    isSubmitting={isSubmitting}
+                  />
+                ) : (
+                  <div className="bg-white rounded-2xl shadow-lg p-6 text-center">
+                    <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <span className="text-2xl text-gray-400">3</span>
+                    </div>
+                    <p className="text-gray-500">
+                      日時を選択すると、予約フォームが表示されます。
+                    </p>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Note */}
           <div className="mt-12 bg-white rounded-xl p-6 max-w-2xl mx-auto">
