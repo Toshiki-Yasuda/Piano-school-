@@ -1,9 +1,17 @@
-import { createClient } from '@supabase/supabase-js'
+import { createClient, SupabaseClient } from '@supabase/supabase-js'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+// Only create client if credentials are configured
+export const supabase: SupabaseClient | null =
+  supabaseUrl && supabaseAnonKey
+    ? createClient(supabaseUrl, supabaseAnonKey)
+    : null
+
+export const isSupabaseConfigured = (): boolean => {
+  return supabase !== null
+}
 
 // Database Types
 export interface TimeSlot {
@@ -29,6 +37,11 @@ export interface Reservation {
 
 // API Functions
 export async function getAvailableSlots(year: number, month: number) {
+  if (!supabase) {
+    console.log('Supabase not configured, returning empty slots')
+    return []
+  }
+
   const startDate = `${year}-${String(month).padStart(2, '0')}-01`
   const endDate = `${year}-${String(month + 1).padStart(2, '0')}-01`
 
@@ -50,6 +63,11 @@ export async function getAvailableSlots(year: number, month: number) {
 }
 
 export async function getSlotsByDate(date: string) {
+  if (!supabase) {
+    console.log('Supabase not configured, returning empty slots')
+    return []
+  }
+
   const { data, error } = await supabase
     .from('time_slots')
     .select('*')
@@ -69,6 +87,10 @@ export async function createReservation(
   slotId: string,
   reservationData: Omit<Reservation, 'id' | 'slot_id' | 'status' | 'created_at'>
 ) {
+  if (!supabase) {
+    return { success: false, error: 'データベースが設定されていません。' }
+  }
+
   // Start a transaction: update slot and create reservation
   const { data: slot, error: slotError } = await supabase
     .from('time_slots')

@@ -4,8 +4,10 @@ import { FiClock } from 'react-icons/fi'
 
 interface TimeSlot {
   id: string
+  date: string
   start_time: string
   end_time: string
+  is_available: boolean
 }
 
 interface TimeSlotPickerProps {
