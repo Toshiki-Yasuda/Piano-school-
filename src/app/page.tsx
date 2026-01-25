@@ -92,9 +92,6 @@ export default function Home() {
                   priority
                 />
               </div>
-              <div className="absolute -bottom-4 -right-4 bg-accent-500 text-white px-6 py-3 rounded-xl shadow-lg">
-                <p className="text-sm font-medium">体験レッスン受付中</p>
-              </div>
             </div>
           </div>
         </div>
