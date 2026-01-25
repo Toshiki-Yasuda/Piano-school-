@@ -3,11 +3,13 @@
 import { useState, useEffect, useCallback } from 'react'
 import { format } from 'date-fns'
 import { ja } from 'date-fns/locale'
-import { FiCheckCircle, FiCalendar } from 'react-icons/fi'
+import { FiCheckCircle, FiCalendar, FiLock } from 'react-icons/fi'
 import Calendar from '@/components/reservation/Calendar'
 import TimeSlotPicker from '@/components/reservation/TimeSlotPicker'
 import ReservationForm, { ReservationFormData } from '@/components/reservation/ReservationForm'
 import { supabase } from '@/lib/supabase'
+
+const RESERVATION_PASSWORD = process.env.NEXT_PUBLIC_RESERVATION_PASSWORD || 'test'
 
 interface TimeSlot {
   id: string
@@ -18,6 +20,9 @@ interface TimeSlot {
 }
 
 export default function ReservationPage() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [password, setPassword] = useState('')
+  const [passwordError, setPasswordError] = useState('')
   const [allSlots, setAllSlots] = useState<TimeSlot[]>([])
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [selectedSlot, setSelectedSlot] = useState<TimeSlot | null>(null)
@@ -32,9 +37,32 @@ export default function ReservationPage() {
     name: string
   } | null>(null)
 
-  // Fetch slots from Supabase
+  // Check if already authenticated
   useEffect(() => {
+    const auth = localStorage.getItem('reservation_auth')
+    if (auth === 'true') {
+      setIsAuthenticated(true)
+    }
+    setIsLoading(false)
+  }, [])
+
+  const handlePasswordSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (password === RESERVATION_PASSWORD) {
+      localStorage.setItem('reservation_auth', 'true')
+      setIsAuthenticated(true)
+      setPasswordError('')
+    } else {
+      setPasswordError('パスワードが正しくありません')
+    }
+  }
+
+  // Fetch slots from Supabase (only when authenticated)
+  useEffect(() => {
+    if (!isAuthenticated) return
+
     const fetchSlots = async () => {
+      setIsLoading(true)
       if (!supabase) {
         console.log('Supabase not configured')
         setIsLoading(false)
@@ -58,7 +86,7 @@ export default function ReservationPage() {
     }
 
     fetchSlots()
-  }, [])
+  }, [isAuthenticated])
 
   // Get available dates
   const availableDates = [...new Set(allSlots.map((slot) => slot.date))]
@@ -125,6 +153,52 @@ export default function ReservationPage() {
     } finally {
       setIsSubmitting(false)
     }
+  }
+
+  // Password screen
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-primary-50 to-accent-50 py-20">
+        <div className="max-w-md mx-auto px-4">
+          <div className="bg-white rounded-2xl shadow-lg p-8">
+            <div className="text-center mb-8">
+              <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <FiLock className="w-8 h-8 text-primary-600" />
+              </div>
+              <h1 className="text-2xl font-serif font-medium text-gray-800 mb-2">
+                生徒専用ページ
+              </h1>
+              <p className="text-gray-600">
+                予約ページにアクセスするには<br />パスワードを入力してください
+              </p>
+            </div>
+
+            <form onSubmit={handlePasswordSubmit}>
+              <div className="mb-4">
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="パスワード"
+                  className="input-field"
+                  autoFocus
+                />
+                {passwordError && (
+                  <p className="text-red-500 text-sm mt-2">{passwordError}</p>
+                )}
+              </div>
+              <button type="submit" className="btn-primary w-full">
+                ログイン
+              </button>
+            </form>
+
+            <p className="text-center text-sm text-gray-500 mt-6">
+              パスワードは教室でお伝えしています
+            </p>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   // Loading state
