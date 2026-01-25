@@ -74,14 +74,19 @@ export default function BulkBookingPage() {
       // Fetch existing students from reservations
       const { data: reservationsData } = await supabase
         .from('reservations')
-        .select('student_name, parent_name, email, phone')
+        .select('student_name, parent_name, student_email, student_phone')
         .order('created_at', { ascending: false })
 
       if (reservationsData) {
         // Remove duplicates by email
         const uniqueStudents = reservationsData.reduce((acc: Student[], curr) => {
-          if (!acc.find(s => s.email === curr.email)) {
-            acc.push(curr)
+          if (!acc.find(s => s.email === curr.student_email)) {
+            acc.push({
+              student_name: curr.student_name,
+              parent_name: curr.parent_name,
+              email: curr.student_email,
+              phone: curr.student_phone,
+            })
           }
           return acc
         }, [])
@@ -134,8 +139,8 @@ export default function BulkBookingPage() {
       time_slot_id: slotId,
       student_name: student.student_name,
       parent_name: student.parent_name || '',
-      email: student.email,
-      phone: student.phone,
+      student_email: student.email,
+      student_phone: student.phone,
       message: '管理画面から登録',
     }))
 
