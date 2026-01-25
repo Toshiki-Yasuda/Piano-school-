@@ -104,7 +104,7 @@ export default function LessonsPage() {
             お子様から大人の方まで、それぞれに合ったコースをご用意しています。
           </p>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 pt-4">
             {lessonPlans.map((plan, index) => (
               <div
                 key={index}
