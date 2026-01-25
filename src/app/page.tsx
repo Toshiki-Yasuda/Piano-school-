@@ -1,6 +1,6 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { FiCalendar, FiMusic, FiHeart, FiUsers } from 'react-icons/fi'
-import { PiPianoKeysFill } from 'react-icons/pi'
 
 const features = [
   {
@@ -85,8 +85,14 @@ export default function Home() {
             </div>
 
             <div className="relative">
-              <div className="aspect-square bg-white rounded-3xl shadow-2xl p-8 flex items-center justify-center">
-                <PiPianoKeysFill className="w-48 h-48 text-primary-300" />
+              <div className="aspect-[4/3] bg-white rounded-3xl shadow-2xl overflow-hidden">
+                <Image
+                  src="/images/hero.jpg"
+                  alt="ピアノレッスンの様子"
+                  fill
+                  className="object-cover"
+                  priority
+                />
               </div>
               <div className="absolute -bottom-4 -right-4 bg-accent-500 text-white px-6 py-3 rounded-xl shadow-lg">
                 <p className="text-sm font-medium">体験レッスン受付中</p>
