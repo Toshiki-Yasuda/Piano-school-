@@ -136,12 +136,13 @@ export default function BulkBookingPage() {
     setResult(null)
 
     const reservations = Array.from(selectedSlots).map(slotId => ({
-      time_slot_id: slotId,
+      slot_id: slotId,
       student_name: student.student_name,
       parent_name: student.parent_name || '',
       student_email: student.email,
       student_phone: student.phone,
       message: '管理画面から登録',
+      status: 'confirmed',
     }))
 
     // Insert reservations
