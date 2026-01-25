@@ -108,7 +108,7 @@ export default function LessonsPage() {
             {lessonPlans.map((plan, index) => (
               <div
                 key={index}
-                className={`card relative ${
+                className={`card relative overflow-visible ${
                   plan.popular ? 'ring-2 ring-primary-500' : ''
                 }`}
               >
