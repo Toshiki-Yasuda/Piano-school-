@@ -62,11 +62,11 @@ export default function ReservationsPage() {
         // Process to get date from time_slots if not in reservations
         const processed: ProcessedReservation[] = (data as ReservationWithSlot[] || []).map((r) => ({
           id: r.id,
-          time_slot_id: r.time_slot_id,
+          slot_id: r.slot_id,
           student_name: r.student_name,
           parent_name: r.parent_name,
-          email: r.email,
-          phone: r.phone,
+          email: r.student_email,
+          phone: r.student_phone,
           message: r.message,
           created_at: r.created_at,
           date: r.date || r.time_slots?.date || '',

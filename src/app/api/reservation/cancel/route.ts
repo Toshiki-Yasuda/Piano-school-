@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Make the time slot available again
-    const slotId = reservation.time_slot_id || reservation.time_slots?.id
+    const slotId = reservation.slot_id || reservation.time_slots?.id
     if (slotId) {
       const { error: updateError } = await supabase
         .from('time_slots')

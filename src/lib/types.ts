@@ -11,12 +11,13 @@ export interface TimeSlot {
 
 export interface Reservation {
   id: string
-  time_slot_id: string
+  slot_id: string
   student_name: string
   parent_name: string
-  email: string
-  phone: string
+  student_email: string
+  student_phone: string
   message: string | null
+  status: 'pending' | 'confirmed' | 'cancelled'
   created_at: string
   // These may come from the reservation directly or from time_slots join
   date?: string
@@ -36,7 +37,7 @@ export interface ReservationWithSlot extends Reservation {
 // Processed reservation with guaranteed date fields
 export interface ProcessedReservation {
   id: string
-  time_slot_id: string
+  slot_id: string
   student_name: string
   parent_name: string
   email: string
