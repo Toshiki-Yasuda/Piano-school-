@@ -63,9 +63,7 @@ export default function Home() {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="text-center md:text-left">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-medium text-gray-800 leading-tight mb-6">
-                音楽のある暮らしを、
-                <br />
-                <span className="text-primary-600">あなたに</span>
+                音楽のある暮らしを、<span className="text-primary-600">あなたに</span>
               </h1>
               <p className="text-lg text-gray-600 mb-8 leading-relaxed">
                 一人ひとりに寄り添う丁寧なレッスンで、
@@ -93,9 +91,6 @@ export default function Home() {
                   className="object-cover"
                   priority
                 />
-              </div>
-              <div className="absolute -bottom-4 -right-4 bg-accent-500 text-white px-6 py-3 rounded-xl shadow-lg">
-                <p className="text-sm font-medium">体験レッスン受付中</p>
               </div>
             </div>
           </div>
