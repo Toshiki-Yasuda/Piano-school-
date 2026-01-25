@@ -1,6 +1,6 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { FiMusic, FiAward, FiBookOpen } from 'react-icons/fi'
-import { PiPianoKeysFill } from 'react-icons/pi'
 
 const qualifications = [
   '○○音楽大学 ピアノ科 卒業',
@@ -50,8 +50,13 @@ export default function TeacherPage() {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Photo */}
             <div className="relative">
-              <div className="aspect-[4/5] bg-gradient-to-br from-primary-100 to-accent-100 rounded-3xl flex items-center justify-center shadow-xl">
-                <PiPianoKeysFill className="w-32 h-32 text-primary-300" />
+              <div className="aspect-[4/5] bg-gradient-to-br from-primary-100 to-accent-100 rounded-3xl overflow-hidden shadow-xl">
+                <Image
+                  src="/images/teacher.png"
+                  alt="講師 山田花子"
+                  fill
+                  className="object-cover"
+                />
               </div>
               <div className="absolute -bottom-6 -right-6 bg-white rounded-2xl shadow-lg p-4">
                 <p className="text-sm text-gray-500">指導歴</p>
