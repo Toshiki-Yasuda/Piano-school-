@@ -85,7 +85,7 @@ export default function Home() {
             <div className="relative">
               <div className="aspect-[4/3] bg-white rounded-3xl shadow-2xl overflow-hidden">
                 <Image
-                  src="/images/hero.jpg"
+                  src="/images/hero.png"
                   alt="ピアノレッスンの様子"
                   fill
                   className="object-cover"
