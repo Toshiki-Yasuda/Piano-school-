@@ -12,7 +12,7 @@ export default function Footer() {
             <Link href="/" className="flex items-center gap-2 mb-4">
               <PiPianoKeysFill className="w-8 h-8 text-primary-400" />
               <span className="font-serif text-xl font-medium text-white">
-                ピアノ教室
+                AYCCピアノ教室
               </span>
             </Link>
             <p className="text-sm leading-relaxed">
@@ -82,7 +82,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm">
-          <p>&copy; {new Date().getFullYear()} ピアノ教室. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} AYCCピアノ教室. All rights reserved.</p>
         </div>
       </div>
     </footer>
