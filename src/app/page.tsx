@@ -32,21 +32,21 @@ const blogPosts = [
     excerpt: '来月の発表会に向けて、生徒さんたちが一生懸命練習しています。今年のテーマは「世界の名曲」。',
     date: '2025年1月20日',
     category: 'イベント',
-    image: '/images/blog-recital.png',
+    image: '/Images/blog-recital.png',
   },
   {
     id: 2,
     title: '新しい教材を導入しました',
     excerpt: '初心者の方にもわかりやすい、新しい教材を導入しました。楽しみながら...',
     date: '2025年1月15日',
-    image: '/images/blog-textbook.png',
+    image: '/Images/blog-textbook.png',
   },
   {
     id: 3,
     title: 'クリスマスコンサートを開催しました',
     excerpt: '先日、教室でクリスマスコンサートを開催しました。生徒さんたちの素敵な演奏...',
     date: '2025年1月10日',
-    image: '/images/blog-christmas.png',
+    image: '/Images/blog-christmas.png',
   },
 ]
 
@@ -86,7 +86,7 @@ export default function Home() {
             <div className="relative">
               <div className="aspect-[4/3] bg-white rounded-3xl shadow-2xl overflow-hidden">
                 <Image
-                  src="/images/hero.png"
+                  src="/Images/hero.png"
                   alt="ピアノレッスンの様子"
                   fill
                   className="object-cover"

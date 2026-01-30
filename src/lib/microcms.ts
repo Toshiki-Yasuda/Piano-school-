@@ -119,7 +119,7 @@ function getDemoBlogPosts(limit: number, offset: number): BlogListResponse {
       </ul>
       <p>ご家族やお友達もぜひお越しください！</p>`,
       excerpt: '来月の発表会に向けて、生徒さんたちが一生懸命練習しています。今年のテーマは「世界の名曲」。',
-      thumbnail: { url: '/images/blog-recital.png', width: 1740, height: 1156 },
+      thumbnail: { url: '/Images/blog-recital.png', width: 1740, height: 1156 },
       category: { id: 'event', name: 'イベント' },
       publishedAt: '2025-01-20T10:00:00.000Z',
       createdAt: '2025-01-20T10:00:00.000Z',
@@ -138,7 +138,7 @@ function getDemoBlogPosts(limit: number, offset: number): BlogListResponse {
       </ul>
       <p>体験レッスンでも使用しますので、ぜひお試しください！</p>`,
       excerpt: '初心者の方にもわかりやすい、新しい教材を導入しました。楽しみながら上達できます。',
-      thumbnail: { url: '/images/blog-textbook.png', width: 1740, height: 1156 },
+      thumbnail: { url: '/Images/blog-textbook.png', width: 1740, height: 1156 },
       category: { id: 'lesson', name: 'レッスン' },
       publishedAt: '2025-01-15T10:00:00.000Z',
       createdAt: '2025-01-15T10:00:00.000Z',
@@ -159,7 +159,7 @@ function getDemoBlogPosts(limit: number, offset: number): BlogListResponse {
       </ul>
       <p>ご参加いただいた皆様、ありがとうございました！</p>`,
       excerpt: '先日、教室でクリスマスコンサートを開催しました。生徒さんたちの素敵な演奏をお届けしました。',
-      thumbnail: { url: '/images/blog-christmas.png', width: 1740, height: 1156 },
+      thumbnail: { url: '/Images/blog-christmas.png', width: 1740, height: 1156 },
       category: { id: 'event', name: 'イベント' },
       publishedAt: '2025-01-10T10:00:00.000Z',
       createdAt: '2025-01-10T10:00:00.000Z',

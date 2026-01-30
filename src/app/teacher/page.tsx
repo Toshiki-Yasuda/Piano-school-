@@ -52,7 +52,7 @@ export default function TeacherPage() {
             <div className="relative">
               <div className="aspect-[4/5] bg-gradient-to-br from-primary-100 to-accent-100 rounded-3xl overflow-hidden shadow-xl">
                 <Image
-                  src="/images/teacher.png"
+                  src="/Images/teacher.png"
                   alt="講師 英和医 詞伊子"
                   fill
                   className="object-cover"
