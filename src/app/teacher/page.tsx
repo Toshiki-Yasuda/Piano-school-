@@ -53,7 +53,7 @@ export default function TeacherPage() {
               <div className="aspect-[4/5] bg-gradient-to-br from-primary-100 to-accent-100 rounded-3xl overflow-hidden shadow-xl">
                 <Image
                   src="/images/teacher.png"
-                  alt="講師 山田花子"
+                  alt="講師 英和医 詞伊子"
                   fill
                   className="object-cover"
                 />
@@ -66,9 +66,10 @@ export default function TeacherPage() {
 
             {/* Profile */}
             <div>
-              <h2 className="text-3xl font-serif font-medium text-gray-800 mb-2">
-                山田 花子
+              <h2 className="text-3xl font-serif font-medium text-gray-800 mb-1">
+                英和医 詞伊子
               </h2>
+              <p className="text-sm text-gray-500 mb-2">えいわい しいこ</p>
               <p className="text-primary-600 mb-6">ピアノ講師</p>
 
               <div className="prose prose-gray">

@@ -23,12 +23,16 @@ export default function AccessPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12">
             {/* Map */}
-            <div className="bg-gray-200 rounded-2xl aspect-square lg:aspect-auto lg:h-full min-h-[400px] flex items-center justify-center">
-              <div className="text-center text-gray-500">
-                <FiMapPin className="w-16 h-16 mx-auto mb-4 text-gray-400" />
-                <p>Google Map</p>
-                <p className="text-sm">（実際の地図がここに表示されます）</p>
-              </div>
+            <div className="rounded-2xl overflow-hidden aspect-square lg:aspect-auto lg:h-full min-h-[400px]">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2914.4751098144396!2d141.3489506!3d43.0686606!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x5f0b299a1f7a2a8d%3A0x6f5c3e5e5f5c3e5e!2z5pyt5bm06aeF!5e0!3m2!1sja!2sjp!4v1234567890"
+                width="100%"
+                height="100%"
+                style={{ border: 0, minHeight: '400px' }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
             </div>
 
             {/* Info */}
@@ -46,11 +50,11 @@ export default function AccessPage() {
                     <div>
                       <h3 className="font-medium mb-1">住所</h3>
                       <p className="text-gray-600">
-                        〒000-0000
+                        〒060-0806
                         <br />
-                        東京都○○区○○1丁目2-3
+                        北海道札幌市北区北6条西4丁目
                         <br />
-                        ○○ビル 3F
+                        JR札幌駅
                       </p>
                     </div>
                   </div>
@@ -61,7 +65,7 @@ export default function AccessPage() {
                     </div>
                     <div>
                       <h3 className="font-medium mb-1">電話番号</h3>
-                      <p className="text-gray-600">03-0000-0000</p>
+                      <p className="text-gray-600">011-000-0000</p>
                       <p className="text-sm text-gray-500">
                         レッスン中は出られない場合があります
                       </p>
@@ -115,11 +119,11 @@ export default function AccessPage() {
               <ul className="space-y-4 text-gray-600">
                 <li className="flex items-start gap-3">
                   <span className="w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center text-sm font-medium flex-shrink-0">1</span>
-                  <span>○○線「○○駅」東口より徒歩5分</span>
+                  <span>JR各線「札幌駅」西改札口より徒歩1分</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center text-sm font-medium flex-shrink-0">2</span>
-                  <span>○○線「△△駅」北口より徒歩8分</span>
+                  <span>地下鉄南北線・東豊線「さっぽろ駅」より徒歩3分</span>
                 </li>
               </ul>
             </div>
@@ -156,7 +160,7 @@ export default function AccessPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="section-title">駅からの道順</h2>
           <p className="section-subtitle">
-            ○○駅東口から、徒歩約5分です。
+            JR札幌駅西改札口から、徒歩約1分です。
           </p>
 
           <div className="mt-12 space-y-6">
@@ -213,7 +217,7 @@ export default function AccessPage() {
             <p className="text-primary-800 text-sm">
               <strong>迷われた場合は</strong>お気軽にお電話ください。
               <br />
-              03-0000-0000（レッスン中は出られない場合があります）
+              011-000-0000（レッスン中は出られない場合があります）
             </p>
           </div>
         </div>

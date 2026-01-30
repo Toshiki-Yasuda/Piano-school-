@@ -29,23 +29,24 @@ const blogPosts = [
   {
     id: 1,
     title: '発表会に向けて練習中です',
-    excerpt: '来月の発表会に向けて、生徒さんたちが一生懸命練習しています。今年のテーマは...',
+    excerpt: '来月の発表会に向けて、生徒さんたちが一生懸命練習しています。今年のテーマは「世界の名曲」。',
     date: '2025年1月20日',
-    image: '/images/blog-placeholder.jpg',
+    category: 'イベント',
+    image: '/images/blog-recital.png',
   },
   {
     id: 2,
     title: '新しい教材を導入しました',
     excerpt: '初心者の方にもわかりやすい、新しい教材を導入しました。楽しみながら...',
     date: '2025年1月15日',
-    image: '/images/blog-placeholder.jpg',
+    image: '/images/blog-textbook.png',
   },
   {
     id: 3,
     title: 'クリスマスコンサートを開催しました',
     excerpt: '先日、教室でクリスマスコンサートを開催しました。生徒さんたちの素敵な演奏...',
     date: '2025年1月10日',
-    image: '/images/blog-placeholder.jpg',
+    image: '/images/blog-christmas.png',
   },
 ]
 
@@ -154,8 +155,17 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-8">
             {blogPosts.map((post) => (
               <Link href={`/blog/${post.id}`} key={post.id} className="card group">
-                <div className="aspect-video bg-gradient-to-br from-primary-100 to-accent-100 flex items-center justify-center">
-                  <FiMusic className="w-16 h-16 text-primary-300 group-hover:scale-110 transition-transform duration-300" />
+                <div className="aspect-video bg-gradient-to-br from-primary-100 to-accent-100 flex items-center justify-center overflow-hidden relative">
+                  {post.image && post.image !== '/images/blog-placeholder.jpg' ? (
+                    <Image
+                      src={post.image}
+                      alt={post.title}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  ) : (
+                    <FiMusic className="w-16 h-16 text-primary-300 group-hover:scale-110 transition-transform duration-300" />
+                  )}
                 </div>
                 <div className="p-6">
                   <p className="text-sm text-gray-500 mb-2">{post.date}</p>
@@ -197,7 +207,7 @@ export default function Home() {
               <div className="text-left">
                 <h3 className="font-medium text-lg mb-4">お問い合わせ方法</h3>
                 <ul className="space-y-2 text-gray-600">
-                  <li>電話: 03-0000-0000</li>
+                  <li>電話: 011-000-0000</li>
                   <li>メール: info@piano-school.example.com</li>
                   <li>LINE: @piano-school</li>
                 </ul>
