@@ -1,4 +1,6 @@
-// Database types for Supabase responses
+// ============================================
+// Database Types (snake_case - matches Supabase)
+// ============================================
 
 export interface TimeSlot {
   id: string
@@ -7,6 +9,7 @@ export interface TimeSlot {
   end_time: string
   is_available: boolean
   created_at?: string
+  updated_at?: string
 }
 
 export interface Reservation {
@@ -49,9 +52,44 @@ export interface ProcessedReservation {
   end_time: string
 }
 
-// Time validation
-export function validateTimeRange(start: string, end: string): string | null {
-  if (!start || !end) return '開始時間と終了時間を入力してください'
-  if (start >= end) return '終了時間は開始時間より後に設定してください'
-  return null
+// ============================================
+// Frontend/Form Types (camelCase)
+// ============================================
+
+export interface ReservationFormData {
+  studentName: string
+  studentEmail: string
+  studentPhone: string
+  parentName?: string
+  message?: string
 }
+
+// ============================================
+// Blog Types (from microCMS)
+// ============================================
+
+export interface BlogPost {
+  id: string
+  title: string
+  content: string
+  excerpt: string
+  thumbnail?: {
+    url: string
+    width: number
+    height: number
+  }
+  category: {
+    id: string
+    name: string
+  }
+  publishedAt: string
+  createdAt: string
+  updatedAt: string
+}
+
+// ============================================
+// Re-export Validation Utilities
+// ============================================
+
+// Re-export for backwards compatibility
+export { validateTimeRange } from './validation'

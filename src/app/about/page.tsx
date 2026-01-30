@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { FiCheck, FiMusic, FiHeart, FiAward } from 'react-icons/fi'
+import { HeroSection } from '@/components/common'
 
 const values = [
   {
@@ -31,19 +32,10 @@ const features = [
 export default function AboutPage() {
   return (
     <>
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary-50 to-accent-50 py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-serif font-medium text-gray-800 mb-6">
-              教室紹介
-            </h1>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              音楽を通じて豊かな心を育む、温かい雰囲気の教室です。
-            </p>
-          </div>
-        </div>
-      </section>
+      <HeroSection
+        title="教室紹介"
+        subtitle="音楽を通じて豊かな心を育む、温かい雰囲気の教室です。"
+      />
 
       {/* Introduction Section */}
       <section className="py-20 bg-white">

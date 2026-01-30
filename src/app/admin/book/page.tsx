@@ -188,7 +188,7 @@ export default function BulkBookingPage() {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-serif font-medium text-gray-800">生徒の予約を登録</h2>
+      <h2 className="text-xl sm:text-2xl font-serif font-medium text-gray-800">生徒の予約を登録</h2>
 
       {result && (
         <div className={`p-4 rounded-lg ${result.success ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
@@ -203,11 +203,11 @@ export default function BulkBookingPage() {
         </div>
       )}
 
-      <div className="grid lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
         {/* Student Selection */}
         <div className="space-y-6">
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h3 className="font-medium mb-4 flex items-center gap-2">
+          <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
+            <h3 className="font-medium mb-3 sm:mb-4 flex items-center gap-2">
               <FiUser className="w-5 h-5" />
               生徒を選択
             </h3>
@@ -316,12 +316,12 @@ export default function BulkBookingPage() {
           </div>
 
           {/* Date Range Filter */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h3 className="font-medium mb-4 flex items-center gap-2">
+          <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
+            <h3 className="font-medium mb-3 sm:mb-4 flex items-center gap-2">
               <FiCalendar className="w-5 h-5" />
               期間を絞り込み
             </h3>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div>
                 <label className="block text-sm text-gray-600 mb-1">開始日</label>
                 <input
@@ -345,9 +345,9 @@ export default function BulkBookingPage() {
         </div>
 
         {/* Available Slots */}
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-medium">
+        <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3 sm:mb-4">
+            <h3 className="font-medium text-sm sm:text-base">
               空き枠を選択
               <span className="text-primary-600 ml-2">
                 ({selectedSlots.size}/{slots.length}件選択中)
@@ -356,14 +356,14 @@ export default function BulkBookingPage() {
             <div className="flex gap-2">
               <button
                 onClick={selectAll}
-                className="text-sm text-primary-600 hover:text-primary-700"
+                className="text-xs sm:text-sm text-primary-600 hover:text-primary-700"
               >
                 全選択
               </button>
               <span className="text-gray-300">|</span>
               <button
                 onClick={clearSelection}
-                className="text-sm text-gray-500 hover:text-gray-700"
+                className="text-xs sm:text-sm text-gray-500 hover:text-gray-700"
               >
                 解除
               </button>
@@ -371,18 +371,18 @@ export default function BulkBookingPage() {
           </div>
 
           {slots.length === 0 ? (
-            <div className="text-center py-12 text-gray-500">
-              <p>この期間に空き枠がありません</p>
-              <p className="text-sm mt-2">期間を変更するか、空き枠を作成してください</p>
+            <div className="text-center py-8 sm:py-12 text-gray-500">
+              <p className="text-sm sm:text-base">この期間に空き枠がありません</p>
+              <p className="text-xs sm:text-sm mt-2">期間を変更するか、空き枠を作成してください</p>
             </div>
           ) : (
-            <div className="max-h-96 overflow-y-auto">
-              <table className="w-full text-sm">
+            <div className="max-h-80 sm:max-h-96 overflow-y-auto">
+              <table className="w-full text-xs sm:text-sm">
                 <thead className="bg-gray-50 sticky top-0">
                   <tr>
-                    <th className="px-3 py-2 text-left w-10"></th>
-                    <th className="px-3 py-2 text-left text-gray-500">日付</th>
-                    <th className="px-3 py-2 text-left text-gray-500">時間</th>
+                    <th className="px-2 sm:px-3 py-2 text-left w-8 sm:w-10"></th>
+                    <th className="px-2 sm:px-3 py-2 text-left text-gray-500">日付</th>
+                    <th className="px-2 sm:px-3 py-2 text-left text-gray-500">時間</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y">
@@ -396,7 +396,7 @@ export default function BulkBookingPage() {
                           : 'hover:bg-gray-50'
                       }`}
                     >
-                      <td className="px-3 py-2">
+                      <td className="px-2 sm:px-3 py-2">
                         <input
                           type="checkbox"
                           checked={selectedSlots.has(slot.id)}
@@ -404,10 +404,10 @@ export default function BulkBookingPage() {
                           className="w-4 h-4 text-primary-600 rounded focus:ring-primary-500"
                         />
                       </td>
-                      <td className="px-3 py-2">
+                      <td className="px-2 sm:px-3 py-2">
                         {format(parseISO(slot.date), 'M/d（E）', { locale: ja })}
                       </td>
-                      <td className="px-3 py-2">
+                      <td className="px-2 sm:px-3 py-2">
                         {slot.start_time.slice(0, 5)} 〜 {slot.end_time.slice(0, 5)}
                       </td>
                     </tr>
@@ -435,9 +435,9 @@ export default function BulkBookingPage() {
       </div>
 
       {/* Usage Guide */}
-      <div className="bg-blue-50 rounded-lg p-6">
+      <div className="bg-blue-50 rounded-lg p-4 sm:p-6">
         <h3 className="font-medium text-blue-800 mb-2">使い方</h3>
-        <ol className="text-sm text-blue-700 space-y-1 list-decimal list-inside">
+        <ol className="text-xs sm:text-sm text-blue-700 space-y-1 list-decimal list-inside">
           <li>生徒を選択（既存の生徒を選ぶか、新規に入力）</li>
           <li>必要に応じて期間を絞り込み</li>
           <li>予約したい空き枠にチェック</li>

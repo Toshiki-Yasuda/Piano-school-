@@ -1,22 +1,14 @@
 import { FiMapPin, FiPhone, FiMail, FiClock } from 'react-icons/fi'
 import { FaTrain, FaCar } from 'react-icons/fa'
+import { HeroSection } from '@/components/common'
 
 export default function AccessPage() {
   return (
     <>
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary-50 to-accent-50 py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-serif font-medium text-gray-800 mb-6">
-              アクセス
-            </h1>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              駅から徒歩5分、通いやすい立地です。
-            </p>
-          </div>
-        </div>
-      </section>
+      <HeroSection
+        title="アクセス"
+        subtitle="駅から徒歩5分、通いやすい立地です。"
+      />
 
       {/* Map & Info Section */}
       <section className="py-20 bg-white">

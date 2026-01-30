@@ -3,6 +3,7 @@ import { format } from 'date-fns'
 import { ja } from 'date-fns/locale'
 import { FiMusic, FiCalendar, FiTag } from 'react-icons/fi'
 import { getBlogPosts } from '@/lib/microcms'
+import { HeroSection } from '@/components/common'
 
 export const revalidate = 60 // Revalidate every 60 seconds
 
@@ -11,19 +12,10 @@ export default async function BlogPage() {
 
   return (
     <>
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary-50 to-accent-50 py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-serif font-medium text-gray-800 mb-6">
-              ブログ
-            </h1>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              教室の日常やレッスンの様子、イベント情報などをお届けします。
-            </p>
-          </div>
-        </div>
-      </section>
+      <HeroSection
+        title="ブログ"
+        subtitle="教室の日常やレッスンの様子、イベント情報などをお届けします。"
+      />
 
       {/* Blog List Section */}
       <section className="py-20 bg-white">

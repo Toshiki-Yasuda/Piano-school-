@@ -100,127 +100,187 @@ export default function ReservationsPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-serif font-medium text-gray-800">予約一覧</h2>
+    <div className="space-y-4 sm:space-y-6">
+      {/* Header with Filter */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+        <h2 className="text-xl sm:text-2xl font-serif font-medium text-gray-800">予約一覧</h2>
 
-        {/* Filter Tabs */}
-        <div className="flex bg-gray-100 rounded-lg p-1">
-          {[
-            { value: 'upcoming', label: '今後の予約' },
-            { value: 'past', label: '過去の予約' },
-            { value: 'all', label: 'すべて' },
-          ].map((tab) => (
-            <button
-              key={tab.value}
-              onClick={() => setFilter(tab.value as typeof filter)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                filter === tab.value
-                  ? 'bg-white text-gray-800 shadow-sm'
-                  : 'text-gray-600 hover:text-gray-800'
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
+        {/* Filter Tabs - scrollable on mobile */}
+        <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
+          <div className="flex bg-gray-100 rounded-lg p-1 min-w-max">
+            {[
+              { value: 'upcoming', label: '今後' },
+              { value: 'past', label: '過去' },
+              { value: 'all', label: 'すべて' },
+            ].map((tab) => (
+              <button
+                key={tab.value}
+                onClick={() => setFilter(tab.value as typeof filter)}
+                className={`px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${
+                  filter === tab.value
+                    ? 'bg-white text-gray-800 shadow-sm'
+                    : 'text-gray-600 hover:text-gray-800'
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
       {filteredReservations.length === 0 ? (
-        <div className="bg-white rounded-lg shadow-sm p-12 text-center">
+        <div className="bg-white rounded-lg shadow-sm p-8 sm:p-12 text-center">
           <p className="text-gray-500">
             {filter === 'upcoming' ? '今後の予約はありません' :
              filter === 'past' ? '過去の予約はありません' : '予約がありません'}
           </p>
         </div>
       ) : (
-        <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50 border-b">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    日時
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    生徒名
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    保護者名
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    連絡先
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    予約日
-                  </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+        <>
+          {/* Mobile Card View */}
+          <div className="md:hidden space-y-3">
+            {filteredReservations.map((reservation) => (
+              <div
+                key={reservation.id}
+                className="bg-white rounded-lg shadow-sm p-4 space-y-3"
+              >
+                {/* Date & Time + Detail Button */}
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center gap-2">
+                    <FiCalendar className="w-4 h-4 text-primary-500 flex-shrink-0" />
+                    <div>
+                      <p className="font-medium text-gray-800">
+                        {reservation.date ? format(parseISO(reservation.date), 'M/d（E）', { locale: ja }) : '日付不明'}
+                      </p>
+                      <p className="text-sm text-gray-500">
+                        {reservation.start_time?.slice(0, 5)} 〜 {reservation.end_time?.slice(0, 5)}
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setSelectedReservation(reservation)}
+                    className="text-primary-600 hover:text-primary-700 text-sm font-medium px-3 py-1 bg-primary-50 rounded-lg"
+                  >
                     詳細
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                {filteredReservations.map((reservation) => (
-                  <tr key={reservation.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center gap-2">
-                        <FiCalendar className="w-4 h-4 text-gray-400" />
-                        <div>
-                          <p className="font-medium text-gray-800">
-                            {reservation.date ? format(parseISO(reservation.date), 'M月d日（E）', { locale: ja }) : '日付不明'}
-                          </p>
-                          <p className="text-sm text-gray-500">
-                            {reservation.start_time?.slice(0, 5)} 〜 {reservation.end_time?.slice(0, 5)}
-                          </p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <p className="font-medium text-gray-800">{reservation.student_name}</p>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <p className="text-gray-600">{reservation.parent_name}</p>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <p className="text-sm text-gray-600">{reservation.email}</p>
-                      <p className="text-sm text-gray-500">{reservation.phone}</p>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {reservation.created_at ? format(parseISO(reservation.created_at), 'M/d HH:mm') : ''}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right">
-                      <button
-                        onClick={() => setSelectedReservation(reservation)}
-                        className="text-primary-600 hover:text-primary-700 text-sm font-medium"
-                      >
-                        詳細
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                  </button>
+                </div>
+
+                {/* Student Info */}
+                <div className="border-t pt-3">
+                  <div className="flex items-center gap-2 mb-1">
+                    <FiUser className="w-4 h-4 text-gray-400" />
+                    <p className="font-medium text-gray-800">{reservation.student_name}</p>
+                  </div>
+                  {reservation.parent_name && (
+                    <p className="text-sm text-gray-500 ml-6">保護者: {reservation.parent_name}</p>
+                  )}
+                </div>
+
+                {/* Contact Info */}
+                <div className="text-sm text-gray-600 space-y-1">
+                  <div className="flex items-center gap-2">
+                    <FiMail className="w-3.5 h-3.5 text-gray-400" />
+                    <span className="truncate">{reservation.email}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <FiPhone className="w-3.5 h-3.5 text-gray-400" />
+                    <span>{reservation.phone}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
-        </div>
+
+          {/* Desktop Table View */}
+          <div className="hidden md:block bg-white rounded-lg shadow-sm overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-gray-50 border-b">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      日時
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      生徒名
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      保護者名
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      連絡先
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      予約日
+                    </th>
+                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      詳細
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {filteredReservations.map((reservation) => (
+                    <tr key={reservation.id} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center gap-2">
+                          <FiCalendar className="w-4 h-4 text-gray-400" />
+                          <div>
+                            <p className="font-medium text-gray-800">
+                              {reservation.date ? format(parseISO(reservation.date), 'M月d日（E）', { locale: ja }) : '日付不明'}
+                            </p>
+                            <p className="text-sm text-gray-500">
+                              {reservation.start_time?.slice(0, 5)} 〜 {reservation.end_time?.slice(0, 5)}
+                            </p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <p className="font-medium text-gray-800">{reservation.student_name}</p>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <p className="text-gray-600">{reservation.parent_name}</p>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <p className="text-sm text-gray-600">{reservation.email}</p>
+                        <p className="text-sm text-gray-500">{reservation.phone}</p>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {reservation.created_at ? format(parseISO(reservation.created_at), 'M/d HH:mm') : ''}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-right">
+                        <button
+                          onClick={() => setSelectedReservation(reservation)}
+                          className="text-primary-600 hover:text-primary-700 text-sm font-medium"
+                        >
+                          詳細
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </>
       )}
 
       {/* Detail Modal */}
       {selectedReservation && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl p-6 w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between mb-6">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl p-4 sm:p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-4 sm:mb-6">
               <h3 className="text-lg font-medium">予約詳細</h3>
               <button
                 onClick={() => setSelectedReservation(null)}
-                className="text-gray-500 hover:text-gray-700"
+                className="text-gray-500 hover:text-gray-700 p-1"
               >
-                ✕
+                <FiX className="w-5 h-5" />
               </button>
             </div>
 
             <div className="space-y-4">
               <div className="flex items-start gap-3">
-                <FiCalendar className="w-5 h-5 text-gray-400 mt-0.5" />
+                <FiCalendar className="w-5 h-5 text-gray-400 mt-0.5 flex-shrink-0" />
                 <div>
                   <p className="text-sm text-gray-500">日時</p>
                   <p className="font-medium">
@@ -233,7 +293,7 @@ export default function ReservationsPage() {
               </div>
 
               <div className="flex items-start gap-3">
-                <FiUser className="w-5 h-5 text-gray-400 mt-0.5" />
+                <FiUser className="w-5 h-5 text-gray-400 mt-0.5 flex-shrink-0" />
                 <div>
                   <p className="text-sm text-gray-500">生徒名</p>
                   <p className="font-medium">{selectedReservation.student_name}</p>
@@ -241,7 +301,7 @@ export default function ReservationsPage() {
               </div>
 
               <div className="flex items-start gap-3">
-                <FiUser className="w-5 h-5 text-gray-400 mt-0.5" />
+                <FiUser className="w-5 h-5 text-gray-400 mt-0.5 flex-shrink-0" />
                 <div>
                   <p className="text-sm text-gray-500">保護者名</p>
                   <p className="font-medium">{selectedReservation.parent_name}</p>
@@ -249,15 +309,15 @@ export default function ReservationsPage() {
               </div>
 
               <div className="flex items-start gap-3">
-                <FiMail className="w-5 h-5 text-gray-400 mt-0.5" />
-                <div>
+                <FiMail className="w-5 h-5 text-gray-400 mt-0.5 flex-shrink-0" />
+                <div className="min-w-0 flex-1">
                   <p className="text-sm text-gray-500">メールアドレス</p>
-                  <p className="font-medium">{selectedReservation.email}</p>
+                  <p className="font-medium break-all">{selectedReservation.email}</p>
                 </div>
               </div>
 
               <div className="flex items-start gap-3">
-                <FiPhone className="w-5 h-5 text-gray-400 mt-0.5" />
+                <FiPhone className="w-5 h-5 text-gray-400 mt-0.5 flex-shrink-0" />
                 <div>
                   <p className="text-sm text-gray-500">電話番号</p>
                   <p className="font-medium">{selectedReservation.phone}</p>
@@ -266,7 +326,7 @@ export default function ReservationsPage() {
 
               {selectedReservation.message && (
                 <div className="flex items-start gap-3">
-                  <FiMessageSquare className="w-5 h-5 text-gray-400 mt-0.5" />
+                  <FiMessageSquare className="w-5 h-5 text-gray-400 mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="text-sm text-gray-500">メッセージ</p>
                     <p className="font-medium whitespace-pre-wrap">{selectedReservation.message}</p>
@@ -275,7 +335,7 @@ export default function ReservationsPage() {
               )}
 
               <div className="flex items-start gap-3">
-                <FiClock className="w-5 h-5 text-gray-400 mt-0.5" />
+                <FiClock className="w-5 h-5 text-gray-400 mt-0.5 flex-shrink-0" />
                 <div>
                   <p className="text-sm text-gray-500">予約受付日時</p>
                   <p className="font-medium">
@@ -285,16 +345,16 @@ export default function ReservationsPage() {
               </div>
             </div>
 
-            <div className="mt-6 pt-4 border-t flex gap-3">
+            <div className="mt-6 pt-4 border-t flex flex-col sm:flex-row gap-3">
               <button
                 onClick={() => setSelectedReservation(null)}
-                className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                className="flex-1 px-4 py-3 sm:py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm font-medium"
               >
                 閉じる
               </button>
               <button
                 onClick={() => setCancelTarget(selectedReservation)}
-                className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center justify-center gap-2"
+                className="flex-1 px-4 py-3 sm:py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center justify-center gap-2 text-sm font-medium"
               >
                 <FiX className="w-4 h-4" />
                 予約をキャンセル

@@ -155,13 +155,13 @@ export default function SlotsManagement() {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-serif font-medium text-gray-800">空き時間管理</h2>
+      <h2 className="text-xl sm:text-2xl font-serif font-medium text-gray-800">空き時間管理</h2>
 
-      <div className="grid lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
         {/* Calendar */}
-        <div className="bg-white rounded-lg shadow-sm p-6">
+        <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
           {/* Month Navigation */}
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between mb-4 sm:mb-6">
             <button
               onClick={prevMonth}
               className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
@@ -180,11 +180,11 @@ export default function SlotsManagement() {
           </div>
 
           {/* Weekday Headers */}
-          <div className="grid grid-cols-7 gap-1 mb-2">
+          <div className="grid grid-cols-7 gap-0.5 sm:gap-1 mb-2">
             {['日', '月', '火', '水', '木', '金', '土'].map((day, index) => (
               <div
                 key={day}
-                className={`text-center text-sm font-medium py-2 ${
+                className={`text-center text-xs sm:text-sm font-medium py-1 sm:py-2 ${
                   index === 0 ? 'text-red-500' : index === 6 ? 'text-blue-500' : 'text-gray-500'
                 }`}
               >
@@ -194,7 +194,7 @@ export default function SlotsManagement() {
           </div>
 
           {/* Calendar Grid */}
-          <div className="grid grid-cols-7 gap-1">
+          <div className="grid grid-cols-7 gap-0.5 sm:gap-1">
             {/* Empty cells for days before month start */}
             {Array.from({ length: startDayOfWeek }).map((_, index) => (
               <div key={`empty-${index}`} className="aspect-square" />
@@ -214,7 +214,7 @@ export default function SlotsManagement() {
                   key={day.toString()}
                   onClick={() => handleDateClick(day)}
                   disabled={isPast}
-                  className={`aspect-square p-1 rounded-lg text-sm relative transition-all ${
+                  className={`aspect-square min-h-[40px] sm:min-h-[48px] p-0.5 sm:p-1 rounded-lg text-xs sm:text-sm relative transition-all ${
                     isPast
                       ? 'text-gray-300 cursor-not-allowed'
                       : isSelected
@@ -228,7 +228,7 @@ export default function SlotsManagement() {
                 >
                   <span className="block">{format(day, 'd')}</span>
                   {hasSlots && !isPast && (
-                    <span className={`block text-xs ${isSelected ? 'text-white' : 'text-green-600'}`}>
+                    <span className={`block text-[10px] sm:text-xs ${isSelected ? 'text-white' : 'text-green-600'}`}>
                       {availableCount}枠
                     </span>
                   )}
@@ -244,16 +244,16 @@ export default function SlotsManagement() {
         </div>
 
         {/* Selected Date Details */}
-        <div className="bg-white rounded-lg shadow-sm p-6">
+        <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
           {selectedDate ? (
             <>
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-medium">
+              <div className="flex items-center justify-between mb-4 sm:mb-6 gap-2">
+                <h3 className="text-base sm:text-lg font-medium">
                   {format(selectedDate, 'M月d日（E）', { locale: ja })}の空き時間
                 </h3>
                 <button
                   onClick={() => setIsModalOpen(true)}
-                  className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+                  className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors text-sm"
                 >
                   <FiPlus className="w-4 h-4" />
                   追加
@@ -321,8 +321,8 @@ export default function SlotsManagement() {
 
       {/* Add Slot Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl p-6 w-full max-w-md mx-4">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl p-4 sm:p-6 w-full max-w-md">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-lg font-medium">空き時間を追加</h3>
               <button
@@ -371,17 +371,17 @@ export default function SlotsManagement() {
                 <p className="text-sm text-red-500">{timeError}</p>
               )}
 
-              <div className="flex gap-3 pt-4">
+              <div className="flex flex-col sm:flex-row gap-3 pt-4">
                 <button
                   onClick={() => setIsModalOpen(false)}
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                  className="flex-1 px-4 py-3 sm:py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
                 >
                   キャンセル
                 </button>
                 <button
                   onClick={handleAddSlot}
                   disabled={isSaving || !!timeError}
-                  className="flex-1 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 px-4 py-3 sm:py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
                 >
                   {isSaving ? '保存中...' : '追加する'}
                 </button>

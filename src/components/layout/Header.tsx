@@ -4,15 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { FiMenu, FiX } from 'react-icons/fi'
 import { PiPianoKeysFill } from 'react-icons/pi'
-
-const navigation = [
-  { name: 'ホーム', href: '/' },
-  { name: '教室紹介', href: '/about' },
-  { name: '講師紹介', href: '/teacher' },
-  { name: 'レッスン・料金', href: '/lessons' },
-  { name: 'アクセス', href: '/access' },
-  { name: 'ブログ', href: '/blog' },
-]
+import { NAVIGATION, SITE_NAME } from '@/lib/constants'
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
@@ -25,13 +17,13 @@ export default function Header() {
           <Link href="/" className="flex items-center gap-2">
             <PiPianoKeysFill className="w-8 h-8 text-primary-600" />
             <span className="font-serif text-xl font-medium text-gray-800">
-              AYCC piano school
+              {SITE_NAME}
             </span>
           </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-6">
-            {navigation.map((item) => (
+            {NAVIGATION.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
@@ -59,7 +51,7 @@ export default function Header() {
         {isOpen && (
           <div className="md:hidden py-4 border-t">
             <div className="flex flex-col gap-2">
-              {navigation.map((item) => (
+              {NAVIGATION.map((item) => (
                 <Link
                   key={item.name}
                   href={item.href}

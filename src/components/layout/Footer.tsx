@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { PiPianoKeysFill } from 'react-icons/pi'
 import { FiMail, FiPhone, FiMapPin } from 'react-icons/fi'
+import { SITE_NAME, SITE_DESCRIPTION, FOOTER_LINKS, CONTACT } from '@/lib/constants'
 
 export default function Footer() {
   return (
@@ -12,15 +13,11 @@ export default function Footer() {
             <Link href="/" className="flex items-center gap-2 mb-4">
               <PiPianoKeysFill className="w-8 h-8 text-primary-400" />
               <span className="font-serif text-xl font-medium text-white">
-                AYCC piano school
+                {SITE_NAME}
               </span>
             </Link>
             <p className="text-sm leading-relaxed">
-              音楽のある暮らしを、あなたに。
-              <br />
-              一人ひとりに寄り添う丁寧なレッスンで、
-              <br />
-              音楽の楽しさをお届けします。
+              {SITE_DESCRIPTION}
             </p>
           </div>
 
@@ -28,36 +25,13 @@ export default function Footer() {
           <div>
             <h3 className="text-white font-medium mb-4">メニュー</h3>
             <ul className="space-y-2 text-sm">
-              <li>
-                <Link href="/about" className="hover:text-primary-400 transition-colors">
-                  教室紹介
-                </Link>
-              </li>
-              <li>
-                <Link href="/teacher" className="hover:text-primary-400 transition-colors">
-                  講師紹介
-                </Link>
-              </li>
-              <li>
-                <Link href="/lessons" className="hover:text-primary-400 transition-colors">
-                  レッスン・料金
-                </Link>
-              </li>
-              <li>
-                <Link href="/access" className="hover:text-primary-400 transition-colors">
-                  アクセス
-                </Link>
-              </li>
-              <li>
-                <Link href="/blog" className="hover:text-primary-400 transition-colors">
-                  ブログ
-                </Link>
-              </li>
-              <li>
-                <Link href="/reservation" className="hover:text-primary-400 transition-colors">
-                  予約
-                </Link>
-              </li>
+              {FOOTER_LINKS.map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href} className="hover:text-primary-400 transition-colors">
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -67,22 +41,22 @@ export default function Footer() {
             <ul className="space-y-3 text-sm">
               <li className="flex items-center gap-2">
                 <FiMapPin className="w-4 h-4 text-primary-400" />
-                <span>〒000-0000 東京都○○区○○1-2-3</span>
+                <span>{CONTACT.address}</span>
               </li>
               <li className="flex items-center gap-2">
                 <FiPhone className="w-4 h-4 text-primary-400" />
-                <span>03-0000-0000</span>
+                <span>{CONTACT.phone}</span>
               </li>
               <li className="flex items-center gap-2">
                 <FiMail className="w-4 h-4 text-primary-400" />
-                <span>info@piano-school.example.com</span>
+                <span>{CONTACT.email}</span>
               </li>
             </ul>
           </div>
         </div>
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm">
-          <p>&copy; {new Date().getFullYear()} AYCC piano school. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} {SITE_NAME}. All rights reserved.</p>
         </div>
       </div>
     </footer>

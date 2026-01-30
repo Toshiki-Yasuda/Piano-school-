@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { FiMusic, FiAward, FiBookOpen } from 'react-icons/fi'
+import { HeroSection } from '@/components/common'
 
 const qualifications = [
   '○○音楽大学 ピアノ科 卒業',
@@ -30,19 +31,10 @@ const teachingStyle = [
 export default function TeacherPage() {
   return (
     <>
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary-50 to-accent-50 py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-serif font-medium text-gray-800 mb-6">
-              講師紹介
-            </h1>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              ピアノを通じて、音楽の素晴らしさをお伝えします。
-            </p>
-          </div>
-        </div>
-      </section>
+      <HeroSection
+        title="講師紹介"
+        subtitle="ピアノを通じて、音楽の素晴らしさをお伝えします。"
+      />
 
       {/* Teacher Profile Section */}
       <section className="py-20 bg-white">

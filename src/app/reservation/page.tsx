@@ -289,26 +289,26 @@ export default function ReservationPage() {
       <section className="py-12 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Steps indicator */}
-          <div className="flex items-center justify-center gap-4 mb-12">
-            <div className={`flex items-center gap-2 ${selectedDate ? 'text-accent-600' : 'text-primary-600'}`}>
-              <span className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${selectedDate ? 'bg-accent-100' : 'bg-primary-600 text-white'}`}>
+          <div className="flex items-center justify-center gap-2 sm:gap-4 mb-8 sm:mb-12">
+            <div className={`flex items-center gap-1 sm:gap-2 ${selectedDate ? 'text-accent-600' : 'text-primary-600'}`}>
+              <span className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs sm:text-sm font-medium ${selectedDate ? 'bg-accent-100' : 'bg-primary-600 text-white'}`}>
                 1
               </span>
-              <span className="hidden sm:inline">日付を選択</span>
+              <span className="hidden sm:inline text-sm">日付を選択</span>
             </div>
-            <div className="w-8 h-0.5 bg-gray-300" />
-            <div className={`flex items-center gap-2 ${selectedSlot ? 'text-accent-600' : selectedDate ? 'text-primary-600' : 'text-gray-400'}`}>
-              <span className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${selectedSlot ? 'bg-accent-100' : selectedDate ? 'bg-primary-600 text-white' : 'bg-gray-200'}`}>
+            <div className="w-4 sm:w-8 h-0.5 bg-gray-300" />
+            <div className={`flex items-center gap-1 sm:gap-2 ${selectedSlot ? 'text-accent-600' : selectedDate ? 'text-primary-600' : 'text-gray-400'}`}>
+              <span className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs sm:text-sm font-medium ${selectedSlot ? 'bg-accent-100' : selectedDate ? 'bg-primary-600 text-white' : 'bg-gray-200'}`}>
                 2
               </span>
-              <span className="hidden sm:inline">時間を選択</span>
+              <span className="hidden sm:inline text-sm">時間を選択</span>
             </div>
-            <div className="w-8 h-0.5 bg-gray-300" />
-            <div className={`flex items-center gap-2 ${selectedSlot ? 'text-primary-600' : 'text-gray-400'}`}>
-              <span className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${selectedSlot ? 'bg-primary-600 text-white' : 'bg-gray-200'}`}>
+            <div className="w-4 sm:w-8 h-0.5 bg-gray-300" />
+            <div className={`flex items-center gap-1 sm:gap-2 ${selectedSlot ? 'text-primary-600' : 'text-gray-400'}`}>
+              <span className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs sm:text-sm font-medium ${selectedSlot ? 'bg-primary-600 text-white' : 'bg-gray-200'}`}>
                 3
               </span>
-              <span className="hidden sm:inline">情報を入力</span>
+              <span className="hidden sm:inline text-sm">情報を入力</span>
             </div>
           </div>
 
@@ -318,7 +318,7 @@ export default function ReservationPage() {
               <p className="text-gray-400 mt-2">しばらくしてから再度ご確認ください。</p>
             </div>
           ) : (
-            <div className="grid lg:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
               {/* Calendar */}
               <div className="lg:col-span-1">
                 <Calendar
@@ -372,9 +372,9 @@ export default function ReservationPage() {
           )}
 
           {/* Note */}
-          <div className="mt-12 bg-white rounded-xl p-6 max-w-2xl mx-auto">
-            <h3 className="font-medium mb-3">ご予約にあたって</h3>
-            <ul className="text-sm text-gray-600 space-y-2">
+          <div className="mt-8 sm:mt-12 bg-white rounded-xl p-4 sm:p-6 max-w-2xl mx-auto">
+            <h3 className="font-medium mb-2 sm:mb-3 text-sm sm:text-base">ご予約にあたって</h3>
+            <ul className="text-xs sm:text-sm text-gray-600 space-y-2">
               <li>・予約完了後、先生にLINE通知が送信されます。</li>
               <li>・キャンセル・変更はレッスン前日までにご連絡ください。</li>
               <li>・体験レッスンをご希望の方は、メッセージ欄にその旨をご記入ください。</li>

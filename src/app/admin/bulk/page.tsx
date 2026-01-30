@@ -7,22 +7,13 @@ import { FiPlus, FiTrash2, FiCheck } from 'react-icons/fi'
 import { supabase } from '@/lib/supabase'
 import ConfirmDialog from '@/components/ConfirmDialog'
 import { validateTimeRange } from '@/lib/types'
+import { WEEKDAYS } from '@/lib/constants'
 
 interface TimeRange {
   id: string
   startTime: string
   endTime: string
 }
-
-const WEEKDAYS = [
-  { value: 0, label: '日曜日' },
-  { value: 1, label: '月曜日' },
-  { value: 2, label: '火曜日' },
-  { value: 3, label: '水曜日' },
-  { value: 4, label: '木曜日' },
-  { value: 5, label: '金曜日' },
-  { value: 6, label: '土曜日' },
-]
 
 export default function BulkRegistration() {
   const [startDate, setStartDate] = useState(format(startOfMonth(addMonths(new Date(), 1)), 'yyyy-MM-dd'))
@@ -172,22 +163,22 @@ export default function BulkRegistration() {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-serif font-medium text-gray-800">空き枠を作成</h2>
+      <h2 className="text-xl sm:text-2xl font-serif font-medium text-gray-800">空き枠を作成</h2>
 
-      <div className="grid lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
         {/* Settings */}
         <div className="space-y-6">
           {/* Date Range */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h3 className="font-medium mb-4">期間を選択</h3>
-            <div className="grid grid-cols-2 gap-4">
+          <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
+            <h3 className="font-medium mb-3 sm:mb-4">期間を選択</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div>
                 <label className="block text-sm text-gray-600 mb-1">開始日</label>
                 <input
                   type="date"
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
                 />
               </div>
               <div>
@@ -196,21 +187,21 @@ export default function BulkRegistration() {
                   type="date"
                   value={endDate}
                   onChange={(e) => setEndDate(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm"
                 />
               </div>
             </div>
           </div>
 
           {/* Weekdays */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h3 className="font-medium mb-4">曜日を選択</h3>
-            <div className="grid grid-cols-4 gap-2">
+          <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
+            <h3 className="font-medium mb-3 sm:mb-4">曜日を選択</h3>
+            <div className="grid grid-cols-4 sm:grid-cols-7 gap-2">
               {WEEKDAYS.map((day) => (
                 <button
                   key={day.value}
                   onClick={() => toggleDay(day.value)}
-                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  className={`px-2 sm:px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
                     selectedDays.includes(day.value)
                       ? 'bg-primary-600 text-white'
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -220,14 +211,14 @@ export default function BulkRegistration() {
                 </button>
               ))}
             </div>
-            <p className="text-sm text-gray-500 mt-3">
+            <p className="text-xs sm:text-sm text-gray-500 mt-3">
               選択中: {selectedDays.length === 0 ? 'なし' : selectedDays.map((d) => WEEKDAYS[d].label.replace('曜日', '')).join('、')}
             </p>
           </div>
 
           {/* Time Ranges */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <div className="flex items-center justify-between mb-4">
+          <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
+            <div className="flex items-center justify-between mb-3 sm:mb-4">
               <h3 className="font-medium">時間帯を設定</h3>
               <button
                 onClick={addTimeRange}
@@ -243,53 +234,55 @@ export default function BulkRegistration() {
                 const error = timeRangeErrors.get(range.id)
                 return (
                   <div key={range.id} className="space-y-1">
-                    <div className="flex items-center gap-3">
-                      <span className="text-sm text-gray-500 w-6">{index + 1}.</span>
-                      <input
-                        type="time"
-                        step="300"
-                        value={range.startTime}
-                        onChange={(e) => updateTimeRange(range.id, 'startTime', e.target.value)}
-                        className={`flex-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent ${
-                          error ? 'border-red-300 bg-red-50' : 'border-gray-300'
-                        }`}
-                      />
-                      <span className="text-gray-400">〜</span>
-                      <input
-                        type="time"
-                        step="300"
-                        value={range.endTime}
-                        onChange={(e) => updateTimeRange(range.id, 'endTime', e.target.value)}
-                        className={`flex-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent ${
-                          error ? 'border-red-300 bg-red-50' : 'border-gray-300'
-                        }`}
-                      />
-                      {timeRanges.length > 1 && (
-                        <button
-                          onClick={() => removeTimeRange(range.id)}
-                          className="p-2 text-red-500 hover:bg-red-50 rounded-lg"
-                        >
-                          <FiTrash2 className="w-4 h-4" />
-                        </button>
-                      )}
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+                      <span className="text-sm text-gray-500 sm:w-6">{index + 1}.</span>
+                      <div className="flex items-center gap-2 sm:gap-3 flex-1">
+                        <input
+                          type="time"
+                          step="300"
+                          value={range.startTime}
+                          onChange={(e) => updateTimeRange(range.id, 'startTime', e.target.value)}
+                          className={`flex-1 px-2 sm:px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm ${
+                            error ? 'border-red-300 bg-red-50' : 'border-gray-300'
+                          }`}
+                        />
+                        <span className="text-gray-400">〜</span>
+                        <input
+                          type="time"
+                          step="300"
+                          value={range.endTime}
+                          onChange={(e) => updateTimeRange(range.id, 'endTime', e.target.value)}
+                          className={`flex-1 px-2 sm:px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm ${
+                            error ? 'border-red-300 bg-red-50' : 'border-gray-300'
+                          }`}
+                        />
+                        {timeRanges.length > 1 && (
+                          <button
+                            onClick={() => removeTimeRange(range.id)}
+                            className="p-2 text-red-500 hover:bg-red-50 rounded-lg flex-shrink-0"
+                          >
+                            <FiTrash2 className="w-4 h-4" />
+                          </button>
+                        )}
+                      </div>
                     </div>
                     {error && (
-                      <p className="text-sm text-red-500 ml-9">{error}</p>
+                      <p className="text-xs sm:text-sm text-red-500 sm:ml-9">{error}</p>
                     )}
                   </div>
                 )
               })}
             </div>
 
-            <p className="text-sm text-gray-500 mt-3">
+            <p className="text-xs sm:text-sm text-gray-500 mt-3">
               例: 1レッスン45分の場合、10:00〜10:45、11:00〜11:45 など
             </p>
           </div>
         </div>
 
         {/* Preview */}
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <h3 className="font-medium mb-4">
+        <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
+          <h3 className="font-medium mb-3 sm:mb-4">
             プレビュー
             <span className="text-primary-600 ml-2">({previewSlots.length}件)</span>
           </h3>
@@ -314,8 +307,8 @@ export default function BulkRegistration() {
             </div>
           ) : (
             <>
-              <div className="max-h-96 overflow-y-auto mb-4">
-                <table className="w-full text-sm">
+              <div className="max-h-96 overflow-y-auto overflow-x-auto mb-4">
+                <table className="w-full text-xs sm:text-sm">
                   <thead className="bg-gray-50 sticky top-0">
                     <tr>
                       <th className="px-3 py-2 text-left text-gray-500">日付</th>
@@ -360,9 +353,9 @@ export default function BulkRegistration() {
       </div>
 
       {/* Usage Guide */}
-      <div className="bg-blue-50 rounded-lg p-6">
+      <div className="bg-blue-50 rounded-lg p-4 sm:p-6">
         <h3 className="font-medium text-blue-800 mb-2">使い方</h3>
-        <ol className="text-sm text-blue-700 space-y-1 list-decimal list-inside">
+        <ol className="text-xs sm:text-sm text-blue-700 space-y-1 list-decimal list-inside">
           <li>登録したい期間（例: 2月1日〜2月28日）を選択</li>
           <li>レッスンを行う曜日（例: 月・水・金）を選択</li>
           <li>時間帯を設定（複数の時間帯を追加可能）</li>
