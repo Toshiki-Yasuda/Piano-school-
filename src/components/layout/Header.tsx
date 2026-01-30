@@ -25,7 +25,7 @@ export default function Header() {
           <Link href="/" className="flex items-center gap-2">
             <PiPianoKeysFill className="w-8 h-8 text-primary-600" />
             <span className="font-serif text-xl font-medium text-gray-800">
-              AYCCピアノ教室
+              AYCC piano school
             </span>
           </Link>
 
