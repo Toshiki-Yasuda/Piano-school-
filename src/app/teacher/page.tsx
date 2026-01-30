@@ -42,7 +42,7 @@ export default function TeacherPage() {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Photo */}
             <div className="relative">
-              <div className="aspect-[4/5] bg-gradient-to-br from-primary-100 to-accent-100 rounded-3xl overflow-hidden shadow-xl">
+              <div className="aspect-[4/5] bg-gradient-to-br from-primary-100 to-accent-100 rounded-3xl overflow-hidden shadow-xl relative">
                 <Image
                   src="/Images/teacher.png"
                   alt="講師 英和医 詞伊子"
