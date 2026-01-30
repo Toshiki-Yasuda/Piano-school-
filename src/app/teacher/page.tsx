@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { FiMusic, FiAward, FiBookOpen } from 'react-icons/fi'
 import { HeroSection } from '@/components/common'
+import { RESERVATION_URL } from '@/lib/constants'
 
 const qualifications = [
   '○○音楽大学 ピアノ科 卒業',
@@ -163,12 +164,14 @@ export default function TeacherPage() {
           <p className="text-primary-100 mb-8">
             まずは体験レッスンで、教室の雰囲気を感じてみてください。
           </p>
-          <Link
-            href="/reservation"
+          <a
+            href={RESERVATION_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-block bg-white text-primary-600 px-8 py-4 rounded-lg font-medium hover:bg-primary-50 transition-colors"
           >
             体験レッスンを予約する
-          </Link>
+          </a>
         </div>
       </section>
     </>

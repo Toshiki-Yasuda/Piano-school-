@@ -1,10 +1,12 @@
 import Link from 'next/link'
+import { RESERVATION_URL } from '@/lib/constants'
 
 interface CtaSectionProps {
   title?: string
   description?: string
   buttonText?: string
   buttonHref?: string
+  external?: boolean
   variant?: 'primary' | 'secondary'
 }
 
@@ -12,7 +14,8 @@ export default function CtaSection({
   title = 'まずは体験レッスンから',
   description = '体験レッスンは1回30分、1,000円で受講いただけます。\nご入会いただいた場合は、入会金から差し引きいたします。',
   buttonText = '体験レッスンを予約する',
-  buttonHref = '/reservation',
+  buttonHref = RESERVATION_URL,
+  external = true,
   variant = 'primary',
 }: CtaSectionProps) {
   const bgClass = variant === 'primary'
@@ -36,12 +39,23 @@ export default function CtaSection({
         <p className={`text-sm sm:text-base ${textClass} mb-6 sm:mb-8 whitespace-pre-line`}>
           {description}
         </p>
-        <Link
-          href={buttonHref}
-          className={`inline-block px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-medium transition-colors ${buttonClass}`}
-        >
-          {buttonText}
-        </Link>
+        {external ? (
+          <a
+            href={buttonHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`inline-block px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-medium transition-colors ${buttonClass}`}
+          >
+            {buttonText}
+          </a>
+        ) : (
+          <Link
+            href={buttonHref}
+            className={`inline-block px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-medium transition-colors ${buttonClass}`}
+          >
+            {buttonText}
+          </Link>
+        )}
       </div>
     </section>
   )

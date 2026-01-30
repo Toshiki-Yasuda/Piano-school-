@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { FiCheck, FiMusic, FiHeart, FiAward } from 'react-icons/fi'
 import { HeroSection } from '@/components/common'
+import { RESERVATION_URL } from '@/lib/constants'
 
 const values = [
   {
@@ -112,12 +113,14 @@ export default function AboutPage() {
             お気軽にお問い合わせください。
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/reservation"
+            <a
+              href={RESERVATION_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-block bg-white text-primary-600 px-8 py-4 rounded-lg font-medium hover:bg-primary-50 transition-colors"
             >
               体験レッスンを予約する
-            </Link>
+            </a>
             <Link
               href="/teacher"
               className="inline-block border-2 border-white text-white px-8 py-4 rounded-lg font-medium hover:bg-white/10 transition-colors"

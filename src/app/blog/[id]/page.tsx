@@ -4,6 +4,7 @@ import { format } from 'date-fns'
 import { ja } from 'date-fns/locale'
 import { FiCalendar, FiTag, FiArrowLeft } from 'react-icons/fi'
 import { getBlogPost, getBlogPosts } from '@/lib/microcms'
+import { RESERVATION_URL } from '@/lib/constants'
 
 export const revalidate = 60
 
@@ -98,9 +99,14 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           <p className="text-gray-600 mb-8">
             体験レッスンで、教室の雰囲気を感じてみてください。
           </p>
-          <Link href="/reservation" className="btn-primary">
+          <a
+            href={RESERVATION_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-primary"
+          >
             体験レッスンを予約する
-          </Link>
+          </a>
         </div>
       </section>
     </>

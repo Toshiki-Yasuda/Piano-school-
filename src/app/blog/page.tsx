@@ -4,6 +4,7 @@ import { ja } from 'date-fns/locale'
 import { FiMusic, FiCalendar, FiTag } from 'react-icons/fi'
 import { getBlogPosts } from '@/lib/microcms'
 import { HeroSection } from '@/components/common'
+import { RESERVATION_URL } from '@/lib/constants'
 
 export const revalidate = 60 // Revalidate every 60 seconds
 
@@ -99,9 +100,14 @@ export default async function BlogPage() {
           <p className="text-gray-600 mb-8">
             体験レッスンで、教室の雰囲気を感じてみてください。
           </p>
-          <Link href="/reservation" className="btn-primary">
+          <a
+            href={RESERVATION_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-primary"
+          >
             体験レッスンを予約する
-          </Link>
+          </a>
         </div>
       </section>
     </>

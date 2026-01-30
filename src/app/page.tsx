@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { FiCalendar, FiMusic, FiHeart, FiUsers } from 'react-icons/fi'
+import { RESERVATION_URL } from '@/lib/constants'
 
 const features = [
   {
@@ -74,9 +75,14 @@ export default function Home() {
                 ピアノを通じて、豊かな心を育みましょう。
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-                <Link href="/reservation" className="btn-primary text-center">
+                <a
+                  href={RESERVATION_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-primary text-center"
+                >
                   レッスンを予約する
-                </Link>
+                </a>
                 <Link href="/about" className="btn-outline text-center">
                   教室について詳しく
                 </Link>
@@ -135,12 +141,14 @@ export default function Home() {
             <br className="hidden sm:block" />
             空き状況をカレンダーで確認して、ご都合の良い日時をお選びください。
           </p>
-          <Link
-            href="/reservation"
+          <a
+            href={RESERVATION_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-block bg-white text-primary-600 px-8 py-4 rounded-lg font-medium hover:bg-primary-50 transition-colors duration-200"
           >
             予約カレンダーを見る
-          </Link>
+          </a>
         </div>
       </section>
 

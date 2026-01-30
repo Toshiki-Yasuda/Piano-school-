@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { FiMenu, FiX } from 'react-icons/fi'
 import { PiPianoKeysFill } from 'react-icons/pi'
-import { NAVIGATION, SITE_NAME } from '@/lib/constants'
+import { NAVIGATION, SITE_NAME, RESERVATION_URL } from '@/lib/constants'
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
@@ -32,9 +32,14 @@ export default function Header() {
                 {item.name}
               </Link>
             ))}
-            <Link href="/reservation" className="btn-primary text-sm py-2">
+            <a
+              href={RESERVATION_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-primary text-sm py-2"
+            >
               予約する
-            </Link>
+            </a>
           </div>
 
           {/* Mobile menu button */}
@@ -61,13 +66,15 @@ export default function Header() {
                   {item.name}
                 </Link>
               ))}
-              <Link
-                href="/reservation"
+              <a
+                href={RESERVATION_URL}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="btn-primary text-center mt-2"
                 onClick={() => setIsOpen(false)}
               >
                 予約する
-              </Link>
+              </a>
             </div>
           </div>
         )}

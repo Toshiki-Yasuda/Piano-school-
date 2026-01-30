@@ -6,6 +6,9 @@ export const SITE_NAME = 'AYCC piano school'
 export const SITE_TAGLINE = '音楽のある暮らしを、あなたに。'
 export const SITE_DESCRIPTION = '一人ひとりに寄り添う丁寧なレッスンで、音楽の楽しさをお届けします。'
 
+// 予約システムURL (Google Apps Script)
+export const RESERVATION_URL = 'https://script.google.com/macros/s/AKfycbwMz1ao5hkEPZDrkCq4buC3DYM6Qs3ekiz5OdFsKJ_eYsx4TNI3y6C1PlRZYrpxqnix/exec?page=reservation'
+
 // ============================================
 // Contact Information
 // ============================================
@@ -35,7 +38,7 @@ export const FOOTER_LINKS = [
   { name: 'レッスン・料金', href: '/lessons' },
   { name: 'アクセス', href: '/access' },
   { name: 'ブログ', href: '/blog' },
-  { name: '予約', href: '/reservation' },
+  { name: '予約', href: RESERVATION_URL, external: true },
 ] as const
 
 // ============================================
